@@ -1,0 +1,12 @@
+# 機密ファイル - GitHubにアップロードしない
+*.pem
+*.key
+.password
+.env
+.env.*
+
+# OpenClaw 設定ファイル（トークンを含むため）
+openclaw.json
+
+# 同期スクリプト（トークンを含むため）
+scripts/sync-config.sh

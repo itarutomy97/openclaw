@@ -1,0 +1,15 @@
+--- a/extensions/line/src/channel.ts
++++ b/extensions/line/src/channel.ts
+@@ -665,6 +665,12 @@ export const lineChannel: RuntimeChannelProvider<LineConfig> = {
+         webhookPath: account.config.webhookPath,
+       });
+
++      // Keep the channel alive until abort signal fires (webhook provider fix)
++      await new Promise<void>((resolve) => {
++        if (ctx.abortSignal?.aborted) { resolve(); return; }
++        ctx.abortSignal?.addEventListener("abort", () => resolve(), { once: true });
++      });
++
+       return monitor;
+     },
+     logoutAccount: async ({ accountId, cfg }) => {
