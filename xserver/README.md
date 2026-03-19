@@ -12,7 +12,31 @@
 | OpenClaw | 2026.3.2 |
 | モデル | Z.ai GLM-4.7 |
 | 外部アクセス | Cloudflare Access保護（要Googleログイン） |
-| プラグイン | Camofox Browser 1.3.1, QMD (BM25検索) |
+| プラグイン | Camofox Browser 1.4.0, QMD (BM25検索) |
+| 構成 | 3インスタンス (Main/Alpha/Beta) |
+
+## 3インスタンス構成
+
+| Instance | Port | State Dir | Channels | Role | Service |
+|----------|------|-----------|----------|------|---------|
+| Main | 18789 | `~/.openclaw/` | LINE, Slack, Telegram | 汎用 | `openclaw-gateway.service` |
+| Alpha | 18791 | `~/.openclaw-alpha/` | Discord | 常識役（参謀） | `openclaw-gateway-alpha.service` |
+| Beta | 18790 | `~/.openclaw-bot2/` | Discord | 実行役 | `openclaw-gateway-bot2.service` |
+
+各インスタンスは `OPENCLAW_STATE_DIR` 環境変数で独立したワークスペース・メモリ・設定を持つ。
+
+### Discord Bot 構成
+
+Alpha と Beta は同じ Discord チャンネルに参加し、`allowBots: true` + `requireMention: false` で互いに会話可能。
+
+| Bot | Role | Client ID | Token Env |
+|-----|------|-----------|-----------|
+| OpenRex-alpha | 常識役（参謀） | 1484089242102661333 | `DISCORD_BOT_TOKEN` |
+| OpenRex-beta | 実行役 | 1484094945735479367 | `DISCORD_BOT_TOKEN_2` |
+
+人格・ルールは各インスタンスの `workspace/SOUL.md` と `workspace/AGENTS.md` で定義。
+
+---
 
 ## 接続方法
 
@@ -61,8 +85,10 @@ xserver/
 ├── openclaw.json           # OpenClaw設定（モデル、LINE認証など）
 ├── .env.backup             # 環境変数（APIキー、トークン）
 ├── config/
-│   ├── cloudflared.service # Cloudflareトンネル設定
-│   └── openclaw-gateway.service # systemdサービス設定
+│   ├── cloudflared.service              # Cloudflareトンネル設定
+│   ├── openclaw-gateway.service         # Main systemdサービス
+│   ├── openclaw-gateway-alpha.service   # Alpha systemdサービス
+│   └── openclaw-gateway-bot2.service    # Beta systemdサービス
 └── scripts/
     ├── restore-vps.sh      # 完全復旧スクリプト
     ├── apply-line-patch.sh # パッチ適用スクリプト（手動用）
@@ -150,16 +176,21 @@ openclaw status --all
 # システム診断
 openclaw doctor
 
-# ダッシュボードURL取得（トークン付き）
-openclaw dashboard
-
 # ログ確認
 openclaw logs
 
-# Gatewayサービス操作
+# Gatewayサービス操作（Main）
 systemctl --user status openclaw-gateway.service
 systemctl --user restart openclaw-gateway.service
-systemctl --user stop openclaw-gateway.service
+
+# Alpha / Beta
+systemctl --user status openclaw-gateway-alpha.service
+systemctl --user status openclaw-gateway-bot2.service
+
+# 全インスタンスのログ
+journalctl --user -u openclaw-gateway.service -f          # Main
+journalctl --user -u openclaw-gateway-alpha.service -f    # Alpha
+journalctl --user -u openclaw-gateway-bot2.service -f     # Beta
 ```
 
 ## 外部アクセス
@@ -259,6 +290,23 @@ ZAI_API_KEY=d8179e04264a4ab9add1a08e60481372.EpG4UtsMwtyILuEK
 | Webhook URL | https://openclaw.deskrex.ai/line/webhook |
 | 環境変数 | `LINE_CHANNEL_ACCESS_TOKEN`, `LINE_CHANNEL_SECRET` |
 
+### Discord Bots (Alpha / Beta)
+
+| 項目 | Alpha | Beta |
+|------|-------|------|
+| Bot名 | OpenRex-alpha | OpenRex-beta |
+| Role | 常識役（参謀） | 実行役 |
+| Client ID | 1484089242102661333 | 1484094945735479367 |
+| Token env | `DISCORD_BOT_TOKEN` | `DISCORD_BOT_TOKEN_2` |
+| Instance | Alpha (port 18791) | Beta (port 18790) |
+| State Dir | `~/.openclaw-alpha/` | `~/.openclaw-bot2/` |
+
+**設定ポイント:**
+- `allowBots: true` - Bot同士の会話を有効化
+- `requireMention: false` - メンション不要で応答
+- `historyLimit: 20` - 直近20メッセージをコンテキストとして読み込み
+- SOUL.md / AGENTS.md で人格・ループ防止ルールを定義
+
 ### LINE リスタートループ修正パッチ
 
 **問題**: OpenClaw v2026.2.17のLINE拡張は、webhookベースのためGatewayが「チャンネル停止」と誤検知し、再起動ループに陥る。
@@ -296,7 +344,7 @@ await new Promise<void>((resolve) => {
 | 項目 | 値 |
 |------|-----|
 | パッケージ | @askjo/camofox-browser |
-| バージョン | 1.3.1 |
+| バージョン | 1.4.0 |
 | 設定 | `plugins.entries.camofox-browser` in openclaw.json |
 
 ### QMD (Query Markdown Documents)

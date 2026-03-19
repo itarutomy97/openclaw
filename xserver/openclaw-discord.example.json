@@ -1,14 +1,5 @@
 {
-  "meta": {
-    "lastTouchedVersion": "2026.3.2",
-    "lastTouchedAt": "2026-03-08T14:51:25.826Z"
-  },
-  "wizard": {
-    "lastRunAt": "2026-02-26T03:05:36.214Z",
-    "lastRunVersion": "2026.2.22-2",
-    "lastRunCommand": "doctor",
-    "lastRunMode": "local"
-  },
+  "_comment": "Discord-only instance template (Alpha or Beta). Use OPENCLAW_STATE_DIR to isolate.",
   "browser": {
     "executablePath": "/snap/brave/600/opt/brave.com/brave/brave-browser",
     "headless": true,
@@ -31,39 +22,35 @@
     "ownerDisplay": "raw"
   },
   "channels": {
-    "telegram": {
+    "discord": {
       "enabled": true,
-      "dmPolicy": "open",
-      "botToken": "YOUR_TELEGRAM_BOT_TOKEN",
-      "allowFrom": ["*"],
+      "token": {
+        "source": "env",
+        "provider": "default",
+        "id": "DISCORD_BOT_TOKEN"
+      },
+      "allowBots": true,
       "groupPolicy": "allowlist",
-      "streaming": "off"
-    },
-    "slack": {
-      "mode": "socket",
-      "signingSecret": "YOUR_SLACK_SIGNING_SECRET",
-      "webhookPath": "/slack/events",
-      "enabled": true,
-      "botToken": "YOUR_SLACK_BOT_TOKEN",
-      "appToken": "YOUR_SLACK_APP_TOKEN",
-      "userTokenReadOnly": true,
-      "groupPolicy": "allowlist",
+      "historyLimit": 20,
+      "textChunkLimit": 2000,
       "streaming": "partial",
-      "nativeStreaming": true,
       "dmPolicy": "open",
-      "allowFrom": ["*"]
-    },
-    "line": {
-      "enabled": true,
-      "channelId": "YOUR_LINE_CHANNEL_ID",
-      "channelAccessToken": "YOUR_LINE_CHANNEL_ACCESS_TOKEN",
-      "channelSecret": "YOUR_LINE_CHANNEL_SECRET",
-      "dmPolicy": "open",
-      "allowFrom": ["*"]
+      "allowFrom": ["*"],
+      "guilds": {
+        "YOUR_SERVER_ID": {
+          "requireMention": false,
+          "channels": {
+            "YOUR_CHANNEL_ID": {
+              "allow": true,
+              "requireMention": false
+            }
+          }
+        }
+      }
     }
   },
   "gateway": {
-    "port": 18789,
+    "port": 18791,
     "mode": "remote",
     "controlUi": {
       "allowedOrigins": ["https://openclaw.deskrex.ai"]
@@ -93,13 +80,7 @@
   },
   "plugins": {
     "entries": {
-      "line": {
-        "enabled": true
-      },
-      "slack": {
-        "enabled": true
-      },
-      "telegram": {
+      "discord": {
         "enabled": true
       },
       "camofox-browser": {
