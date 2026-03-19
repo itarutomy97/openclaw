@@ -4,7 +4,7 @@
 #   {{OPENCLAW_PATH}} -> /root/.nvm/versions/node/v24.13.1/lib/node_modules/openclaw/dist/index.js
 
 [Unit]
-Description=OpenClaw Gateway (v2026.2.17)
+Description=OpenClaw Gateway (v2026.3.2)
 After=network-online.target
 Wants=network-online.target
 
@@ -20,7 +20,7 @@ Environment=OPENCLAW_GATEWAY_PORT=18789
 Environment="OPENCLAW_SYSTEMD_UNIT=openclaw-gateway.service"
 Environment=OPENCLAW_SERVICE_MARKER=openclaw
 Environment=OPENCLAW_SERVICE_KIND=gateway
-Environment=OPENCLAW_SERVICE_VERSION=2026.2.17
+Environment=OPENCLAW_SERVICE_VERSION=2026.3.2
 Environment=ZAI_API_KEY={{ZAI_API_KEY}}
 
 [Install]

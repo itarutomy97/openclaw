@@ -25,13 +25,15 @@ Root cause: OpenClaw v2026.2.17's LINE webhook provider resolves immediately, ga
 ## Z.ai API Errors
 
 ```bash
-# Verify API key in service file
-grep ZAI_API_KEY ~/.config/systemd/user/openclaw-gateway.service
+# Verify API key in .env file
+grep ZAI_API_KEY ~/.openclaw/.env
 
 # Re-add if missing
-sed -i '/Environment=OPENCLAW_SERVICE_VERSION/a Environment=ZAI_API_KEY=YOUR_KEY' ~/.config/systemd/user/openclaw-gateway.service
-systemctl --user daemon-reload
+echo "ZAI_API_KEY=YOUR_KEY" >> ~/.openclaw/.env
 systemctl --user restart openclaw-gateway.service
+
+# Or restore from backup
+./scripts/sync-config.sh
 ```
 
 ## Pairing Error (disconnected 1008: pairing required)

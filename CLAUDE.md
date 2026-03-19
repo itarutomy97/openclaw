@@ -24,7 +24,7 @@ openclaw/
 | IP | 162.43.54.40 |
 | User | root (password in `xserver/.password`) |
 | External | https://openclaw.deskrex.ai |
-| Tech | Ubuntu 24.04 LTS, Node.js 24 (NVM), OpenClaw, Z.ai GLM-5, systemd, Cloudflare Tunnel |
+| Tech | Ubuntu 24.04 LTS, Node.js 24 (NVM), OpenClaw 2026.3.2, Z.ai GLM-4.7, Camofox Browser, QMD, systemd, Cloudflare Tunnel |
 
 ### Commands
 
@@ -63,10 +63,11 @@ xserver/scripts/
 
 ### Hard Rules
 
-- **After `npm update -g openclaw`**: MUST run `./xserver/scripts/apply-line-patch.sh` and `./xserver/scripts/sync-config.sh`
+- **After `npm update -g openclaw`**: Run `./xserver/scripts/sync-config.sh` then `systemctl --user restart openclaw-gateway.service`（LINE パッチは ExecStartPre で自動適用）
 - **After VPS rebuild**: Use `./xserver/scripts/restore-vps.sh`
-- **ZAI_API_KEY**: Must be in systemd service file, NOT openclaw.json
-- **LINE patch**: Required for v2026.2.17 - webhook provider resolves immediately causing restart loops
+- **ZAI_API_KEY**: Must be in `~/.openclaw/.env`, NOT openclaw.json（health-check.sh が .env を検証）
+- **LINE patch**: Required for v2026.2.17+ - auto-line-patch.sh が ExecStartPre で毎起動時に自動適用
+- **Health check**: `/root/openclaw/xserver/scripts/health-check.sh` が cron で毎時自動実行、ログは `/var/log/openclaw-health.log`
 
 ## Quick Links (Rules)
 
@@ -78,5 +79,10 @@ xserver/scripts/
 ## External Services
 
 - **LINE Bot**: @785sznop (OpenRex)
+- **Telegram Bot**: @openrex_bot
+- **Slack App**: A0AG7UDV57D (Socket Mode)
 - **Cloudflare Tunnel**: openclaw.deskrex.ai
+- **Brave Search API**: キー in `xserver/.env.backup`
+- **Camofox Browser**: `@askjo/camofox-browser@1.3.1` (ブラウザ自動化プラグイン)
+- **QMD**: `@tobilu/qmd` (Markdown ドキュメント検索、BM25 インデックス)
 - **Dashboard Token**: In `xserver/.env.backup` / `xserver/openclaw.json`

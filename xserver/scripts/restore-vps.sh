@@ -149,7 +149,7 @@ fi
 
 # Install cloudflared as systemd service
 if [ ! -f /etc/systemd/system/cloudflared.service ]; then
-    cp "$CONFIG_DIR/cloudflared.service" /etc/systemd/system/cloudflared.service"
+    cp "$CONFIG_DIR/cloudflared.service" /etc/systemd/system/cloudflared.service
     systemctl daemon-reload
     systemctl enable cloudflared
     log_info "Cloudflare tunnel service installed"

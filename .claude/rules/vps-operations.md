@@ -30,24 +30,30 @@ The script:
 After running `npm update -g openclaw`:
 
 ```bash
-./scripts/apply-line-patch.sh   # Fix LINE restart loop
-./scripts/sync-config.sh         # Restore credentials
+./scripts/sync-config.sh         # Restore credentials (.env + openclaw.json)
+systemctl --user restart openclaw-gateway.service  # LINE patch auto-applied via ExecStartPre
 ```
+
+Note: LINE パッチは `auto-line-patch.sh` が ExecStartPre で自動適用するため手動不要。
 
 ## Health Check
 
-Run periodically or after any changes:
+Cron で毎時自動実行。手動でも実行可能：
 
 ```bash
 /root/openclaw/xserver/scripts/health-check.sh
+
+# ログ確認
+tail -f /var/log/openclaw-health.log
 ```
 
 Checks:
-- ZAI_API_KEY presence
+- ZAI_API_KEY presence in `~/.openclaw/.env`
 - LINE credentials in openclaw.json
 - Gateway service running
 - Cloudflare tunnel running
 - Recent errors in logs
+- QMD CLI installed and openclaw-main collection status
 
 ## Configuration Sync
 
@@ -58,9 +64,9 @@ If settings are missing or corrupted:
 ```
 
 Restores:
-- openclaw.json → ~/.openclaw/
-- Environment variables → ~/.openclaw/.env
-- Restarts gateway service
+- openclaw.json → ~/.openclaw/openclaw.json
+- Environment variables → ~/.openclaw/.env (ZAI_API_KEY, Slack/LINE/Gateway tokens, Google credentials)
+- Restarts gateway service (LINE patch auto-applied via ExecStartPre)
 
 ## SSH Config
 

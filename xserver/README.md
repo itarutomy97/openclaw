@@ -9,9 +9,10 @@
 | ユーザー | root |
 | SSHポート | 22 |
 | OS | Ubuntu 24.04 LTS |
-| OpenClaw | 2026.2.22-2 |
-| モデル | Z.ai GLM-5 |
-| 外部アクセス | Cloudflare Access保護（要ログイン） |
+| OpenClaw | 2026.3.2 |
+| モデル | Z.ai GLM-4.7 |
+| 外部アクセス | Cloudflare Access保護（要Googleログイン） |
+| プラグイン | Camofox Browser 1.3.1, QMD (BM25検索) |
 
 ## 接続方法
 
@@ -64,8 +65,10 @@ xserver/
 │   └── openclaw-gateway.service # systemdサービス設定
 └── scripts/
     ├── restore-vps.sh      # 完全復旧スクリプト
-    ├── apply-line-patch.sh # パッチ適用スクリプト（旧式）
-    └── auto-line-patch.sh  # 自動パッチスクリプト（systemdで実行）
+    ├── apply-line-patch.sh # パッチ適用スクリプト（手動用）
+    ├── auto-line-patch.sh  # 自動パッチスクリプト（ExecStartPreで毎起動時実行）
+    ├── health-check.sh     # ヘルスチェック（cron毎時自動実行）
+    └── sync-config.sh      # 設定復元（openclaw.json + .env）
 ```
 
 ### 自動復旧（推奨）
@@ -111,8 +114,8 @@ chmod +x scripts/*.sh
 
 5. **ZAI_API_KEY 追加**
    ```bash
-   # ~/.config/systemd/user/openclaw-gateway.service に追加
-   Environment=ZAI_API_KEY=d8179e04264a4ab9add1a08e60481372.EpG4UtsMwtyILuEK
+   # ~/.openclaw/.env に追加
+   echo "ZAI_API_KEY=d8179e04264a4ab9add1a08e60481372.EpG4UtsMwtyILuEK" >> ~/.openclaw/.env
    ```
 
 6. **LINE パッチ適用**
@@ -198,9 +201,9 @@ ssh -N -L 18789:127.0.0.1:18789 root@162.43.54.40
 
 ---
 
-## モデル設定（GLM-5 / Z.ai）
+## モデル設定（GLM-4.7 / Z.ai）
 
-OpenClawはZ.aiのGLM-5をデフォルトモデルとして使用します。
+OpenClawはZ.aiのGLM-4.7をデフォルトモデルとして使用します。
 
 ### 設定内容（openclaw.json）
 
@@ -209,7 +212,7 @@ OpenClawはZ.aiのGLM-5をデフォルトモデルとして使用します。
   "agents": {
     "defaults": {
       "model": {
-        "primary": "zai/glm-5"
+        "primary": "zai/glm-4.7"
       }
     }
   }
@@ -218,13 +221,13 @@ OpenClawはZ.aiのGLM-5をデフォルトモデルとして使用します。
 
 ### ZAI_API_KEY 設定
 
-systemdサービスに環境変数として設定：
+`~/.openclaw/.env` に環境変数として設定：
 
 ```
-Environment=ZAI_API_KEY=d8179e04264a4ab9add1a08e60481372.EpG4UtsMwtyILuEK
+ZAI_API_KEY=d8179e04264a4ab9add1a08e60481372.EpG4UtsMwtyILuEK
 ```
 
-**注意**: `openclaw gateway install` を実行するとサービスファイルが再生成されるため、ZAI_API_KEYを再追加する必要があります。
+**注意**: `sync-config.sh` で `.env` ファイルを復元可能。health-check.sh が `.env` 内の ZAI_API_KEY を検証します。
 
 ---
 
@@ -280,7 +283,49 @@ await new Promise<void>((resolve) => {
 ~/.config/systemd/user/openclaw-gateway.service  # ExecStartPreで呼び出し
 ```
 
-**注意**: `npm update -g openclaw` でパッチが消えるため、更新後に再適用が必要。
+**注意**: `npm update -g openclaw` でパッチが消えるが、ExecStartPre により次回起動時に自動再適用されるため手動操作は不要。
+
+---
+
+## プラグイン
+
+### Camofox Browser
+
+ブラウザ自動化プラグイン。
+
+| 項目 | 値 |
+|------|-----|
+| パッケージ | @askjo/camofox-browser |
+| バージョン | 1.3.1 |
+| 設定 | `plugins.entries.camofox-browser` in openclaw.json |
+
+### QMD (Query Markdown Documents)
+
+Markdown ドキュメントの BM25 検索。OpenClaw ワークスペース内のドキュメントをインデックスして検索可能にする。
+
+| 項目 | 値 |
+|------|-----|
+| パッケージ | @tobilu/qmd (npm) |
+| コレクション | openclaw-main |
+| 対象 | `~/.openclaw/workspace/**/*.md` |
+| チャンク | 900文字、オーバーラップ15% |
+
+```bash
+# コレクション確認
+qmd collection list
+
+# インデックス更新
+qmd update
+
+# 検索
+qmd search "キーワード"
+```
+
+### Brave Search API
+
+| 項目 | 値 |
+|------|-----|
+| 環境変数 | `BRAVE_API_KEY` in .env.backup |
 
 ---
 
@@ -381,7 +426,7 @@ openclaw devices approve <REQUEST_ID>
 ```json
 "gateway": {
   "port": 18789,
-  "mode": "local",
+  "mode": "remote",
   "auth": {
     "mode": "none"
   },
