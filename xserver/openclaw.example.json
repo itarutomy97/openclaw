@@ -60,6 +60,32 @@
       "channelSecret": "YOUR_LINE_CHANNEL_SECRET",
       "dmPolicy": "open",
       "allowFrom": ["*"]
+    },
+    "discord": {
+      "enabled": true,
+      "token": {
+        "source": "env",
+        "provider": "default",
+        "id": "DISCORD_BOT_TOKEN"
+      },
+      "dmPolicy": "open",
+      "groupPolicy": "allowlist",
+      "allowBots": true,
+      "allowFrom": ["*"],
+      "guilds": {
+        "YOUR_SERVER_ID": {
+          "requireMention": false,
+          "channels": {
+            "YOUR_CHANNEL_ID": {
+              "allow": true,
+              "requireMention": false
+            }
+          }
+        }
+      },
+      "streaming": "partial",
+      "historyLimit": 20,
+      "textChunkLimit": 2000
     }
   },
   "gateway": {
@@ -100,6 +126,9 @@
         "enabled": true
       },
       "telegram": {
+        "enabled": true
+      },
+      "discord": {
         "enabled": true
       },
       "camofox-browser": {
