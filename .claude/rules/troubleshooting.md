@@ -16,7 +16,7 @@ Symptom: Gateway continuously restarts LINE channel.
 
 Fix:
 ```bash
-./scripts/apply-line-patch.sh
+./xserver/scripts/apply-line-patch.sh
 systemctl --user restart openclaw-gateway.service
 ```
 
@@ -85,5 +85,5 @@ systemctl restart cloudflared
 ## Config Lost After Update
 
 ```bash
-./scripts/sync-config.sh
+./xserver/scripts/sync-config.sh
 ```

@@ -9,4 +9,4 @@
 openclaw.json
 
 # 同期スクリプト（トークンを含むため）
-scripts/sync-config.sh
+**/sync-config.sh

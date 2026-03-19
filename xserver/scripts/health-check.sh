@@ -83,7 +83,7 @@ echo "=== Summary ==="
 if [ "$ERRORS" -gt 0 ]; then
     echo "❌ $ERRORS error(s) found"
     echo
-    echo "To fix, run: /root/openclaw-x-server/scripts/sync-config.sh"
+    echo "To fix, run: /root/openclaw/xserver/scripts/sync-config.sh"
     exit 1
 else
     echo "✅ All checks passed"

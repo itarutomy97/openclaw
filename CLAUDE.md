@@ -1,21 +1,32 @@
 # CLAUDE.md
 
-OpenClaw AI Gateway VPS configuration for DeskRex platform. LINE/Slack integration via Cloudflare Tunnel.
+OpenClaw AI Gatewayのマルチインスタンス管理リポジトリ。
 
-## Tech Stack
+## Architecture
 
-Ubuntu 24.04 LTS | Node.js 24 (NVM) | OpenClaw 2026.2.17 | Z.ai GLM-5 | systemd | Cloudflare Tunnel
+```
+openclaw/
+├── xserver/               # XServer VPSインスタンス (162.43.54.40)
+│   ├── openclaw.json      # モデル、LINE/Slack認証、Gateway設定
+│   ├── .env.backup        # APIキーバックアップ
+│   ├── config/            # systemdサービステンプレート
+│   └── scripts/           # 管理スクリプト
+├── patches/               # 共通パッチ（全インスタンス共通）
+└── docs/                  # 共通ドキュメント
+```
 
-## Server
+新しいインスタンスを追加する場合は `xserver/` と同レベルにディレクトリを作成。
+
+## XServer Instance
 
 | Item | Value |
 |------|-------|
 | IP | 162.43.54.40 |
-| User | root (password in `.password`) |
+| User | root (password in `xserver/.password`) |
 | External | https://openclaw.deskrex.ai |
-| Local | http://localhost:18789 (via SSH tunnel) |
+| Tech | Ubuntu 24.04 LTS, Node.js 24 (NVM), OpenClaw, Z.ai GLM-5, systemd, Cloudflare Tunnel |
 
-## Commands
+### Commands
 
 ```bash
 # SSH connection
@@ -36,36 +47,26 @@ openclaw logs
 # Diagnostics
 openclaw status --all
 openclaw doctor
-openclaw dashboard  # Get URL with auth token
+openclaw dashboard
 ```
 
-## Scripts
+### Scripts
 
 ```
-scripts/
+xserver/scripts/
 ├── restore-vps.sh      # Full VPS restoration after rebuild
-├── apply-line-patch.sh # Fix LINE restart loop bug
-├── health-check.sh     # Verify configuration integrity
-└── sync-config.sh      # Restore settings from backup
+├── apply-line-patch.sh  # Fix LINE restart loop bug
+├── auto-line-patch.sh   # Auto-patch on service start
+├── health-check.sh      # Verify configuration integrity
+└── sync-config.sh       # Restore settings from backup
 ```
 
-## Hard Rules
+### Hard Rules
 
-- **After `npm update -g openclaw`**: MUST run `./scripts/apply-line-patch.sh` and `./scripts/sync-config.sh`
-- **After VPS rebuild**: Use `./scripts/restore-vps.sh`
+- **After `npm update -g openclaw`**: MUST run `./xserver/scripts/apply-line-patch.sh` and `./xserver/scripts/sync-config.sh`
+- **After VPS rebuild**: Use `./xserver/scripts/restore-vps.sh`
 - **ZAI_API_KEY**: Must be in systemd service file, NOT openclaw.json
 - **LINE patch**: Required for v2026.2.17 - webhook provider resolves immediately causing restart loops
-
-## Repository Structure
-
-```
-openclaw-x-server/
-├── openclaw.json           # Model, LINE/Slack credentials, gateway config
-├── .env.backup             # API keys backup
-├── config/                 # systemd service templates
-├── patches/                # LINE webhook fix patch
-└── scripts/                # Management scripts
-```
 
 ## Quick Links (Rules)
 
@@ -78,4 +79,4 @@ openclaw-x-server/
 
 - **LINE Bot**: @785sznop (OpenRex)
 - **Cloudflare Tunnel**: openclaw.deskrex.ai
-- **Dashboard Token**: In `.env.backup` / `openclaw.json`
+- **Dashboard Token**: In `xserver/.env.backup` / `xserver/openclaw.json`

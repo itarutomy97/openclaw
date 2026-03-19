@@ -4,13 +4,13 @@
 
 1. Transfer files to VPS:
 ```bash
-scp -r openclaw-x-server root@162.43.54.40:/tmp/
+scp -r openclaw/xserver root@162.43.54.40:/tmp/openclaw-xserver
 ```
 
 2. SSH and run restore script:
 ```bash
 ssh root@162.43.54.40
-cd /tmp/openclaw-x-server
+cd /tmp/openclaw-xserver
 chmod +x scripts/*.sh
 ./scripts/restore-vps.sh
 ```
@@ -39,7 +39,7 @@ After running `npm update -g openclaw`:
 Run periodically or after any changes:
 
 ```bash
-/root/openclaw-x-server/scripts/health-check.sh
+/root/openclaw/xserver/scripts/health-check.sh
 ```
 
 Checks:
