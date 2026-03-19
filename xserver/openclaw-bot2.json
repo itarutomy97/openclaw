@@ -89,6 +89,9 @@
     "entries": {
       "discord": {
         "enabled": true
+      },
+      "camofox-browser": {
+        "enabled": true
       }
     }
   }
