@@ -306,7 +306,7 @@ ZAI_API_KEY=d8179e04264a4ab9add1a08e60481372.EpG4UtsMwtyILuEK
 | State Dir | `~/.openclaw-alpha/` | `~/.openclaw-beta/` |
 
 **設定ポイント:**
-- `allowBots: "mentions"` - Bot同士のメンション付きメッセージのみ処理（ループ防止）
+- `allowBots: true` - Bot同士の会話を有効化（v2026.3.2は"mentions"未対応、ループ防止はSOUL.mdで制御）
 - `requireMention: true` - メンション必須（Bot間は `<@ユーザーID>` 形式で呼び出し）
 - `historyLimit: 20` - 直近20メッセージをコンテキストとして読み込み
 - SOUL.md で人格・ループ防止ルール・Bot間メンションIDを定義

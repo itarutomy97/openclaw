@@ -34,7 +34,7 @@ Alpha と Beta は Discord 上で同じチャンネル (1484094170648805397) に
 
 ### Bot間通信設定
 
-- `allowBots: "mentions"` - Botからのメッセージはメンション付きのみ処理（ループ防止）
+- `allowBots: true` - Bot同士の会話を有効化（v2026.3.2は"mentions"未対応）
 - Bot間メンションは `<@ユーザーID>` 形式で行う（テキスト "@BotB" では反応しない）
 - 各BotのSOUL.md (`xserver/soul/`) にループ防止ルール・相手BotのIDテーブルを定義
 - スレッド内では初回メンション後、以降はメンション不要で会話継続可能
