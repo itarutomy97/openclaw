@@ -16,6 +16,7 @@ RestartSec=5
 KillMode=process
 Environment=HOME=/root
 Environment=OPENCLAW_STATE_DIR=/root/.openclaw-sudax
+Environment=OPENCLAW_PROFILE=sudax
 Environment=OPENCLAW_GATEWAY_PORT=18800
 Environment="OPENCLAW_SYSTEMD_UNIT=openclaw-gateway-sudax.service"
 Environment=OPENCLAW_SERVICE_MARKER=openclaw

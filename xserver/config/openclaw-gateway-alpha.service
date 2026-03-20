@@ -16,6 +16,7 @@ RestartSec=5
 KillMode=process
 Environment=HOME=/root
 Environment=OPENCLAW_STATE_DIR=/root/.openclaw-alpha
+Environment=OPENCLAW_PROFILE=alpha
 Environment=OPENCLAW_GATEWAY_PORT=18791
 Environment="OPENCLAW_SYSTEMD_UNIT=openclaw-gateway-alpha.service"
 Environment=OPENCLAW_SERVICE_MARKER=openclaw

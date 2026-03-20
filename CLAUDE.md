@@ -79,17 +79,42 @@ openclaw doctor
 
 ```
 xserver/scripts/
-├── restore-vps.sh      # Full VPS restoration after rebuild
+├── restore-vps.sh       # Full VPS restoration after rebuild
+├── deploy-workspace.sh  # Deploy SOUL.md/AGENTS.md/etc to correct workspace paths
 ├── apply-line-patch.sh  # Fix LINE restart loop bug
 ├── auto-line-patch.sh   # Auto-patch on service start
 ├── health-check.sh      # Verify configuration integrity
 └── sync-config.sh       # Restore settings from backup
 ```
 
+### Workspace分離（超重要）
+
+各Discordインスタンスは `OPENCLAW_PROFILE` で workspace を分離する。
+
+| Instance | OPENCLAW_PROFILE | Workspace Path |
+|----------|-----------------|----------------|
+| Alpha | alpha | `~/.openclaw/workspace-alpha` |
+| Beta | beta | `~/.openclaw/workspace-beta` |
+| Sudax | sudax | `~/.openclaw/workspace-sudax` |
+| Tight | tight | `~/.openclaw/workspace-tight` |
+| Main | (なし) | `~/.openclaw/workspace` |
+
+**絶対にやってはいけないこと:**
+- `~/.openclaw/workspace`（Main）にDiscord Bot用のSOUL.mdを置くこと → 全Botが同じpersonaを読む
+- `~/.openclaw-{profile}/workspace` にファイルを置くこと → PROFILEモードでは読まれない
+- workspaceファイルの更新時にセッションをクリアし忘れること → 古いpersonaが残る
+
+**workspaceファイル更新手順:** `./xserver/scripts/deploy-workspace.sh [instance|all]`
+
+**ローカルでの管理:** `xserver/soul/` に `{instance}-{FILE}.md` 形式で保管（gitバックアップ）
+
 ### Hard Rules
 
-- **After `npm update -g openclaw`**: Run `./xserver/scripts/sync-config.sh`（全3インスタンスを再起動。LINE パッチは ExecStartPre で自動適用）
+- **After `npm update -g openclaw`**: Run `./xserver/scripts/sync-config.sh`（全インスタンスを再起動。LINE パッチは ExecStartPre で自動適用）
 - **After VPS rebuild**: Use `./xserver/scripts/restore-vps.sh`
+- **OPENCLAW_PROFILE**: 各Discord Botのsystemdサービスに `OPENCLAW_PROFILE={instance}` が必須（workspace分離のため）
+- **Workspace deploy**: SOUL.md等を更新したら必ず `deploy-workspace.sh` を使う（手動cpは禁止 → パスミス防止）
+- **Session clear**: workspace更新後は必ずセッション削除 → `rm -rf ~/.openclaw-*/agents/*/sessions/*`
 - **ZAI_API_KEY**: Must be in each instance's `.env`, NOT openclaw.json
 - **OPENCLAW_STATE_DIR**: Alpha/Beta の独立は環境変数 `OPENCLAW_STATE_DIR` で実現（systemd service file で設定）
 - **LINE patch**: Required for v2026.2.17+ - auto-line-patch.sh が ExecStartPre で毎起動時に自動適用
