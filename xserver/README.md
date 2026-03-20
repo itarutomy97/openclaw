@@ -15,24 +15,28 @@
 | プラグイン | Camofox Browser 1.4.0, QMD (BM25検索) |
 | 構成 | 3インスタンス (Main/Alpha/Beta) |
 
-## 3インスタンス構成
+## 5インスタンス構成
 
 | Instance | Port | State Dir | Channels | Role | Service |
 |----------|------|-----------|----------|------|---------|
 | Main | 18789 | `~/.openclaw/` | LINE, Slack, Telegram | 汎用 | `openclaw-gateway.service` |
 | Alpha | 18791 | `~/.openclaw-alpha/` | Discord | 常識役（参謀） | `openclaw-gateway-alpha.service` |
-| Beta | 18790 | `~/.openclaw-bot2/` | Discord | 実行役 | `openclaw-gateway-bot2.service` |
+| Beta | 18790 | `~/.openclaw-beta/` | Discord | 実行役 | `openclaw-gateway-beta.service` |
+| Sudax | 18800 | `~/.openclaw-sudax/` | Discord | スダックス persona | `openclaw-gateway-sudax.service` |
+| Tight | 18810 | `~/.openclaw-tight/` | Discord | タイトさん persona | `openclaw-gateway-tight.service` |
 
 各インスタンスは `OPENCLAW_STATE_DIR` 環境変数で独立したワークスペース・メモリ・設定を持つ。
 
 ### Discord Bot 構成
 
-Alpha と Beta は同じ Discord チャンネルに参加し、`allowBots: true` + `requireMention: false` で互いに会話可能。
+Alpha と Beta は同じ Discord チャンネルに参加し、`allowBots: "mentions"` + `requireMention: true` で互いにメンション経由で会話可能。Sudax と Tight も同様。Bot間メンションは `<@ユーザーID>` 形式で行い、ループ防止ルールは各SOUL.mdで定義。
 
-| Bot | Role | Client ID | Token Env |
-|-----|------|-----------|-----------|
-| OpenRex-alpha | 常識役（参謀） | 1484089242102661333 | `DISCORD_BOT_TOKEN` |
-| OpenRex-beta | 実行役 | 1484094945735479367 | `DISCORD_BOT_TOKEN_2` |
+| Bot | Role | Client ID | Token Env | Channel |
+|-----|------|-----------|-----------|---------|
+| OpenRex-alpha | 常識役（参謀） | 1484089242102661333 | `DISCORD_BOT_TOKEN` | 1484094170648805397 |
+| OpenRex-beta | 実行役 | 1484094945735479367 | `DISCORD_BOT_TOKEN_2` | 1484094170648805397 |
+| スダックス | 須田仁之 persona | 1484401495439970515 | `DISCORD_BOT_TOKEN_SUDAX` | 1484387071790678067 |
+| タイト | タイトさん persona | 1484404212136939580 | `DISCORD_BOT_TOKEN_TIGHT` | 1484387071790678067 |
 
 人格・ルールは各インスタンスの `workspace/SOUL.md` と `workspace/AGENTS.md` で定義。
 
@@ -299,13 +303,14 @@ ZAI_API_KEY=d8179e04264a4ab9add1a08e60481372.EpG4UtsMwtyILuEK
 | Client ID | 1484089242102661333 | 1484094945735479367 |
 | Token env | `DISCORD_BOT_TOKEN` | `DISCORD_BOT_TOKEN_2` |
 | Instance | Alpha (port 18791) | Beta (port 18790) |
-| State Dir | `~/.openclaw-alpha/` | `~/.openclaw-bot2/` |
+| State Dir | `~/.openclaw-alpha/` | `~/.openclaw-beta/` |
 
 **設定ポイント:**
-- `allowBots: true` - Bot同士の会話を有効化
-- `requireMention: false` - メンション不要で応答
+- `allowBots: "mentions"` - Bot同士のメンション付きメッセージのみ処理（ループ防止）
+- `requireMention: true` - メンション必須（Bot間は `<@ユーザーID>` 形式で呼び出し）
 - `historyLimit: 20` - 直近20メッセージをコンテキストとして読み込み
-- SOUL.md / AGENTS.md で人格・ループ防止ルールを定義
+- SOUL.md で人格・ループ防止ルール・Bot間メンションIDを定義
+- スレッド内では初回メンション後、以降はメンション不要で会話継続可能
 
 ### LINE リスタートループ修正パッチ
 
