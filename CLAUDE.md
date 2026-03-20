@@ -24,8 +24,9 @@ openclaw/
 | Main | 18789 | LINE, Slack, Telegram | 汎用 | `~/.openclaw/` |
 | Alpha | 18791 | Discord only | 常識役（参謀） | `~/.openclaw-alpha/` |
 | Beta | 18790 | Discord only | 実行役 | `~/.openclaw-bot2/` |
+| Sudax | 18800 | Discord only | スダックス persona | `~/.openclaw-sudax/` |
 
-Alpha と Beta は Discord 上で同じチャンネルに参加し、独立したメモリ・人格を持つ。SOUL.md / AGENTS.md で役割を定義。
+Alpha と Beta は Discord 上で同じチャンネルに参加し、独立したメモリ・人格を持つ。Sudax は別チャンネル用。各インスタンスの SOUL.md / AGENTS.md で役割を定義。
 
 ## XServer Instance
 
@@ -46,6 +47,7 @@ ssh root@162.43.54.40
 systemctl --user status openclaw-gateway.service          # Main
 systemctl --user status openclaw-gateway-alpha.service    # Alpha
 systemctl --user status openclaw-gateway-bot2.service     # Beta
+systemctl --user status openclaw-gateway-sudax.service    # Sudax
 systemctl --user restart openclaw-gateway.service
 systemctl status cloudflared
 
@@ -53,6 +55,7 @@ systemctl status cloudflared
 journalctl --user -u openclaw-gateway.service -f          # Main
 journalctl --user -u openclaw-gateway-alpha.service -f    # Alpha
 journalctl --user -u openclaw-gateway-bot2.service -f     # Beta
+journalctl --user -u openclaw-gateway-sudax.service -f    # Sudax
 
 # Diagnostics
 openclaw status --all
@@ -93,7 +96,8 @@ xserver/scripts/
 - **Slack App**: A0AG7UDV57D (Socket Mode) - Main instance
 - **Discord Bot Alpha**: OpenRex-alpha (常識役, client_id: 1484089242102661333) - Alpha instance
 - **Discord Bot Beta**: OpenRex-beta (実行役, client_id: 1484094945735479367) - Beta instance
-- **Discord Server**: 1473906830160953548, Channel: 1484094170648805397
+- **Discord Bot Sudax**: スダックス (須田仁之 persona, client_id: 1484401495439970515) - Sudax instance
+- **Discord Server**: 1473906830160953548
 - **Cloudflare Tunnel**: openclaw.deskrex.ai
 - **Brave Search API**: キー in `xserver/.env.backup`
 - **Camofox Browser**: `@askjo/camofox-browser@1.4.0` (ブラウザ自動化プラグイン、全インスタンス共通)
