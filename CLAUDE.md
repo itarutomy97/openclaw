@@ -25,8 +25,9 @@ openclaw/
 | Alpha | 18791 | Discord only | 常識役（参謀） | `~/.openclaw-alpha/` |
 | Beta | 18790 | Discord only | 実行役 | `~/.openclaw-bot2/` |
 | Sudax | 18800 | Discord only | スダックス persona | `~/.openclaw-sudax/` |
+| Tight | 18810 | Discord only | タイトさん persona | `~/.openclaw-tight/` |
 
-Alpha と Beta は Discord 上で同じチャンネルに参加し、独立したメモリ・人格を持つ。Sudax は別チャンネル用。各インスタンスの SOUL.md / AGENTS.md で役割を定義。
+Alpha と Beta は Discord 上で同じチャンネルに参加し、独立したメモリ・人格を持つ。Sudax/Tight は別チャンネル用。各インスタンスの SOUL.md / AGENTS.md で役割を定義。
 
 ## XServer Instance
 
@@ -48,6 +49,7 @@ systemctl --user status openclaw-gateway.service          # Main
 systemctl --user status openclaw-gateway-alpha.service    # Alpha
 systemctl --user status openclaw-gateway-bot2.service     # Beta
 systemctl --user status openclaw-gateway-sudax.service    # Sudax
+systemctl --user status openclaw-gateway-tight.service    # Tight
 systemctl --user restart openclaw-gateway.service
 systemctl status cloudflared
 
@@ -56,6 +58,7 @@ journalctl --user -u openclaw-gateway.service -f          # Main
 journalctl --user -u openclaw-gateway-alpha.service -f    # Alpha
 journalctl --user -u openclaw-gateway-bot2.service -f     # Beta
 journalctl --user -u openclaw-gateway-sudax.service -f    # Sudax
+journalctl --user -u openclaw-gateway-tight.service -f    # Tight
 
 # Diagnostics
 openclaw status --all
@@ -97,6 +100,7 @@ xserver/scripts/
 - **Discord Bot Alpha**: OpenRex-alpha (常識役, client_id: 1484089242102661333) - Alpha instance
 - **Discord Bot Beta**: OpenRex-beta (実行役, client_id: 1484094945735479367) - Beta instance
 - **Discord Bot Sudax**: スダックス (須田仁之 persona, client_id: 1484401495439970515) - Sudax instance
+- **Discord Bot Tight**: タイト (タイトさん/ユウキ persona, client_id: 1484404212136939580) - Tight instance
 - **Discord Server**: 1473906830160953548
 - **Cloudflare Tunnel**: openclaw.deskrex.ai
 - **Brave Search API**: キー in `xserver/.env.backup`

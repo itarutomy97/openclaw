@@ -10,6 +10,7 @@ openclaw.json
 openclaw-alpha.json
 openclaw-bot2.json
 openclaw-sudax.json
+openclaw-tight.json
 
 # 同期スクリプト（トークンを含むため）
 **/sync-config.sh
