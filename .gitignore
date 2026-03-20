@@ -11,6 +11,7 @@ openclaw-alpha.json
 openclaw-beta.json
 openclaw-sudax.json
 openclaw-tight.json
+openclaw-onagigawa.json
 
 # 同期スクリプト（トークンを含むため）
 **/sync-config.sh
