@@ -144,7 +144,8 @@ xserver/scripts/
 - **Discord Bot Onagigawa**: おなぎの翁 (小名木川 persona, client_id: 1484475707097878528) - Onagigawa instance
 - **Discord Server**: 1473906830160953548
 - **Cloudflare Tunnel**: openclaw.deskrex.ai
-- **Brave Search API**: キー in `xserver/.env.backup`
+- **Brave Search API**: キー in `xserver/.env.backup`、全インスタンスの `.env` に設定済み
+- **Tavily Search API**: `openclaw-tavily` プラグイン (search/extract/crawl/research/map)、キー in `xserver/.env.backup`、全インスタンスの `.env` に設定済み
 - **Camofox Browser**: `@askjo/camofox-browser@1.4.0` (ブラウザ自動化プラグイン、全インスタンス共通)
 - **QMD**: `@tobilu/qmd` (Markdown ドキュメント検索、BM25 インデックス)
 - **Dashboard Token**: In `xserver/.env.backup` / `xserver/openclaw.json`

@@ -2,7 +2,9 @@
 # deploy-workspace.sh - Deploy workspace files (SOUL.md, AGENTS.md, etc.) to VPS
 #
 # Usage: ./deploy-workspace.sh [instance]
-#   instance: alpha, beta, sudax, tight, all (default: all)
+#   instance: alpha, beta, sudax, tight, onagigawa, all (default: all)
+#
+# Also syncs API keys (BRAVE_API_KEY, TAVILY_API_KEY) from Main .env to all instances
 #
 # IMPORTANT: Workspace files live at ~/.openclaw/workspace-{profile}
 # NOT at ~/.openclaw-{profile}/workspace (that's the old wrong path)
@@ -49,6 +51,23 @@ if [ "$INSTANCES" = "all" ]; then
 else
     deploy_instance "$INSTANCES"
 fi
+
+echo ""
+echo "=== Syncing API keys to all instances ==="
+MAIN_ENV="/root/.openclaw/.env"
+for key in BRAVE_API_KEY TAVILY_API_KEY; do
+    VAL=$(grep "^${key}=" "$MAIN_ENV" 2>/dev/null | head -1 | sed "s/^${key}=//")
+    if [ -n "$VAL" ]; then
+        for inst in alpha beta sudax tight onagigawa; do
+            ENV_FILE="/root/.openclaw-${inst}/.env"
+            if ! grep -q "^${key}=" "$ENV_FILE" 2>/dev/null; then
+                echo "${key}=${VAL}" >> "$ENV_FILE"
+                echo "  ${inst}: ${key} added"
+            fi
+        done
+    fi
+done
+echo "  done"
 
 echo ""
 echo "=== Clearing sessions ==="
