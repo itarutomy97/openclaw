@@ -43,7 +43,7 @@ deploy_instance() {
 }
 
 if [ "$INSTANCES" = "all" ]; then
-    for inst in alpha beta sudax tight; do
+    for inst in alpha beta sudax tight onagigawa; do
         deploy_instance "$inst"
     done
 else
@@ -58,7 +58,7 @@ echo "  done"
 echo ""
 echo "=== Restarting services ==="
 if [ "$INSTANCES" = "all" ]; then
-    systemctl --user restart openclaw-gateway-alpha.service openclaw-gateway-beta.service openclaw-gateway-sudax.service openclaw-gateway-tight.service
+    systemctl --user restart openclaw-gateway-alpha.service openclaw-gateway-beta.service openclaw-gateway-sudax.service openclaw-gateway-tight.service openclaw-gateway-onagigawa.service
 else
     systemctl --user restart "openclaw-gateway-${INSTANCES}.service"
 fi

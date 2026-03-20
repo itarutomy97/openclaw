@@ -12,6 +12,7 @@ openclaw/
 │   ├── openclaw-beta.json      # Beta: Discord 実行役 (port 18790)
 │   ├── openclaw-sudax.json     # Sudax: Discord スダックス (port 18800)
 │   ├── openclaw-tight.json     # Tight: Discord タイトさん (port 18810)
+│   ├── openclaw-onagigawa.json # Onagigawa: Discord おなぎの翁 (port 18820)
 │   ├── .env.backup             # APIキーバックアップ
 │   ├── soul/                   # SOUL.md（Bot人格・ループ防止ルール）
 │   ├── config/                 # systemdサービステンプレート
@@ -20,17 +21,18 @@ openclaw/
 └── docs/                       # 共通ドキュメント
 ```
 
-### 5-Instance Architecture
+### 6-Instance Architecture
 
-| Instance | Port | Channels | Role | State Dir |
-|----------|------|----------|------|-----------|
-| Main | 18789 | LINE, Slack, Telegram | 汎用 | `~/.openclaw/` |
-| Alpha | 18791 | Discord only | 常識役（参謀） | `~/.openclaw-alpha/` |
-| Beta | 18790 | Discord only | 実行役 | `~/.openclaw-beta/` |
-| Sudax | 18800 | Discord only | スダックス persona | `~/.openclaw-sudax/` |
-| Tight | 18810 | Discord only | タイトさん persona | `~/.openclaw-tight/` |
+| Instance | Port | Channels | Role | State Dir | Workspace |
+|----------|------|----------|------|-----------|-----------|
+| Main | 18789 | LINE, Slack, Telegram | 汎用 | `~/.openclaw/` | `~/.openclaw/workspace` |
+| Alpha | 18791 | Discord only | 常識役（参謀） | `~/.openclaw-alpha/` | `~/.openclaw/workspace-alpha` |
+| Beta | 18790 | Discord only | 実行役 | `~/.openclaw-beta/` | `~/.openclaw/workspace-beta` |
+| Sudax | 18800 | Discord only | スダックス persona | `~/.openclaw-sudax/` | `~/.openclaw/workspace-sudax` |
+| Tight | 18810 | Discord only | タイトさん persona | `~/.openclaw-tight/` | `~/.openclaw/workspace-tight` |
+| Onagigawa | 18820 | Discord only | おなぎの翁 persona | `~/.openclaw-onagigawa/` | `~/.openclaw/workspace-onagigawa` |
 
-Alpha と Beta は Discord 上で同じチャンネル (1484094170648805397) に参加。Sudax と Tight は別チャンネル (1484387071790678067) に参加。各インスタンスは独立したメモリ・人格を持つ。
+Alpha と Beta は Discord 上で同じチャンネル (1484094170648805397) に参加。Sudax/Tight/Onagigawa は別チャンネル (1484387071790678067) に参加。各インスタンスは独立したメモリ・人格を持つ。Onagigawa は requireMention: false（メンション不要で反応）。
 
 ### Bot間通信設定
 
@@ -59,16 +61,18 @@ systemctl --user status openclaw-gateway.service          # Main
 systemctl --user status openclaw-gateway-alpha.service    # Alpha
 systemctl --user status openclaw-gateway-beta.service     # Beta
 systemctl --user status openclaw-gateway-sudax.service    # Sudax
-systemctl --user status openclaw-gateway-tight.service    # Tight
+systemctl --user status openclaw-gateway-tight.service      # Tight
+systemctl --user status openclaw-gateway-onagigawa.service # Onagigawa
 systemctl --user restart openclaw-gateway.service
 systemctl status cloudflared
 
 # Logs
-journalctl --user -u openclaw-gateway.service -f          # Main
-journalctl --user -u openclaw-gateway-alpha.service -f    # Alpha
-journalctl --user -u openclaw-gateway-beta.service -f     # Beta
-journalctl --user -u openclaw-gateway-sudax.service -f    # Sudax
-journalctl --user -u openclaw-gateway-tight.service -f    # Tight
+journalctl --user -u openclaw-gateway.service -f            # Main
+journalctl --user -u openclaw-gateway-alpha.service -f      # Alpha
+journalctl --user -u openclaw-gateway-beta.service -f       # Beta
+journalctl --user -u openclaw-gateway-sudax.service -f      # Sudax
+journalctl --user -u openclaw-gateway-tight.service -f      # Tight
+journalctl --user -u openclaw-gateway-onagigawa.service -f  # Onagigawa
 
 # Diagnostics
 openclaw status --all
@@ -97,6 +101,7 @@ xserver/scripts/
 | Beta | beta | `~/.openclaw/workspace-beta` |
 | Sudax | sudax | `~/.openclaw/workspace-sudax` |
 | Tight | tight | `~/.openclaw/workspace-tight` |
+| Onagigawa | onagigawa | `~/.openclaw/workspace-onagigawa` |
 | Main | (なし) | `~/.openclaw/workspace` |
 
 **絶対にやってはいけないこと:**
@@ -136,6 +141,7 @@ xserver/scripts/
 - **Discord Bot Beta**: OpenRex-beta (実行役, client_id: 1484094945735479367) - Beta instance
 - **Discord Bot Sudax**: スダックス (須田仁之 persona, client_id: 1484401495439970515) - Sudax instance
 - **Discord Bot Tight**: タイト (タイトさん/ユウキ persona, client_id: 1484404212136939580) - Tight instance
+- **Discord Bot Onagigawa**: おなぎの翁 (小名木川 persona, client_id: 1484475707097878528) - Onagigawa instance
 - **Discord Server**: 1473906830160953548
 - **Cloudflare Tunnel**: openclaw.deskrex.ai
 - **Brave Search API**: キー in `xserver/.env.backup`
