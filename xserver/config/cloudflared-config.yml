@@ -1,0 +1,10 @@
+tunnel: 61b0a90d-3f54-4b62-ad9c-11cf42b0f57c
+credentials-file: /root/.cloudflared/61b0a90d-3f54-4b62-ad9c-11cf42b0f57c.json
+
+ingress:
+  - hostname: openclaw.deskrex.ai
+    service: http://localhost:18789
+    originRequest:
+      http2Origin: false
+      noTLSVerify: true
+  - service: http_status:404

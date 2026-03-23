@@ -1,8 +1,8 @@
 # OpenClaw Gateway Onagigawa systemd service template
 # Discord bot instance (onagigawa, おなぎの翁 persona) on port 18820
 # Variables to be replaced during restore:
-#   {{NODE_PATH}} -> /root/.nvm/versions/node/v24.13.1/bin/node
-#   {{OPENCLAW_PATH}} -> /root/.nvm/versions/node/v24.13.1/lib/node_modules/openclaw/dist/index.js
+#   /root/.nvm/versions/node/v24.13.1/bin/node -> /root/.nvm/versions/node/v24.13.1/bin/node
+#   /root/.nvm/versions/node/v24.13.1/bin/../lib/node_modules/openclaw/dist/index.js -> /root/.nvm/versions/node/v24.13.1/lib/node_modules/openclaw/dist/index.js
 
 [Unit]
 Description=OpenClaw Gateway Onagigawa (v2026.3.2)
@@ -10,7 +10,7 @@ After=network-online.target
 Wants=network-online.target
 
 [Service]
-ExecStart={{NODE_PATH}} {{OPENCLAW_PATH}} gateway --port 18820 --allow-unconfigured
+ExecStart=/root/.nvm/versions/node/v24.13.1/bin/node /root/.nvm/versions/node/v24.13.1/bin/../lib/node_modules/openclaw/dist/index.js gateway --port 18820 --allow-unconfigured
 Restart=always
 RestartSec=5
 KillMode=process
@@ -22,8 +22,8 @@ Environment="OPENCLAW_SYSTEMD_UNIT=openclaw-gateway-onagigawa.service"
 Environment=OPENCLAW_SERVICE_MARKER=openclaw
 Environment=OPENCLAW_SERVICE_KIND=gateway
 Environment=OPENCLAW_SERVICE_VERSION=2026.3.2
-Environment=ZAI_API_KEY={{ZAI_API_KEY}}
-Environment=DISCORD_BOT_TOKEN_ONAGIGAWA={{DISCORD_BOT_TOKEN_ONAGIGAWA}}
+Environment=ZAI_API_KEY=${ZAI_API_KEY}
+Environment=DISCORD_BOT_TOKEN_ONAGIGAWA=${DISCORD_BOT_TOKEN}
 
 [Install]
 WantedBy=default.target

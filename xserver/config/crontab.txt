@@ -1,0 +1,3 @@
+# VPS crontab (root)
+0 * * * * /root/openclaw-x-server/scripts/health-check.sh >> /var/log/openclaw-health.log 2>&1
+0 7 * * * /root/.openclaw/scripts/ai-news-digest.sh

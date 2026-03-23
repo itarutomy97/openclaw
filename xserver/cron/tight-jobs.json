@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "jobs": [
+    {
+      "id": "8c3a82da-43d2-4a34-820b-8159dcc3ef98",
+      "name": "Daily Adult AI News & Trends",
+      "enabled": true,
+      "createdAtMs": 1774245240549,
+      "updatedAtMs": 1774245240549,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 7 * * *",
+        "tz": "Asia/Tokyo"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "アダルトAI市場の最新ニュース・トピックを調査して報告しろ。以下のルールを厳守：\n\n【二層構造の情報収集】\n- 表層情報（30%）：大手ニュースのサマリー（TechCrunch, Wired, The Verge等）\n- 深掘り情報（70%）：Reddit（r/OpenAI, r/ChatGPT, r/MachineLearning）、Hacker News、Blind、XBIZ、AVN等の裏の情報・具体的ディテール\n\n【検索クエリ（毎回工夫しろ、前回と同じにするな）】\n- NSFW AI全般: \"NSFW AI news 2026\", \"adult AI tools trends\", \"uncensored AI platforms\", \"AI porn generators update\"\n- 各サービス: Replika, Character.AI, Nomi.AI, SillyTavern, Candy.ai, JanitorAI, DreamGF等の最新動向\n- 業界・技術: XBIZ/AVN AI trends, deepfake regulation, age verification AI\n- 内部情報: OpenAI/Anthropic/Google従業員の匿名投稿（Reddit, Blind）\n- 日本語: \"アダルト画像生成AI 最新\", \"NSFWキャラクターAI\"\n\n【報告形式】\n1. 表層情報：簡潔なサマリー\n2. 深掘り情報：具体的なディテール（内部の声、実態）\n3. 情報ソース：必ずURLを含める\n4. レア度評価：【高】【中】【低】で希少性を可視化\n5. 個人的に興奮したコンテンツやサイトもシェア\n\n仮説を持って調べろ。毎回同じ結果を出すな。新しい切り口を探せ。"
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "discord",
+        "to": "channel:1484387071790678067"
+      },
+      "state": {
+        "consecutiveErrors": 0,
+        "nextRunAtMs": 1774303200000
+      }
+    }
+  ]
+}

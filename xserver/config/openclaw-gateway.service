@@ -1,27 +1,22 @@
-# OpenClaw Gateway systemd service template
-# Variables to be replaced during restore:
-#   {{NODE_PATH}} -> /root/.nvm/versions/node/v24.13.1/bin/node
-#   {{OPENCLAW_PATH}} -> /root/.nvm/versions/node/v24.13.1/lib/node_modules/openclaw/dist/index.js
-
 [Unit]
-Description=OpenClaw Gateway (v2026.3.2)
+Description=OpenClaw Gateway LINE (v2026.3.2)
 After=network-online.target
 Wants=network-online.target
 
 [Service]
-# Auto-apply LINE restart loop patch before starting (survives npm update -g openclaw)
 ExecStartPre=/root/openclaw-scripts/auto-line-patch.sh
-ExecStart={{NODE_PATH}} {{OPENCLAW_PATH}} gateway --port 18789 --allow-unconfigured
+ExecStart="/root/.nvm/versions/node/v24.13.1/bin/node" "/root/.nvm/versions/node/v24.13.1/lib/node_modules/openclaw/dist/index.js" gateway --port 18789 --allow-unconfigured
 Restart=always
 RestartSec=5
 KillMode=process
 Environment=HOME=/root
+Environment="PATH=/root/.nvm/current/bin:/root/.local/bin:/root/.npm-global/bin:/root/bin:/root/.volta/bin:/root/.asdf/shims:/root/.bun/bin:/root/.fnm/current/bin:/root/.local/share/pnpm:/usr/local/bin:/usr/bin:/bin"
 Environment=OPENCLAW_GATEWAY_PORT=18789
 Environment="OPENCLAW_SYSTEMD_UNIT=openclaw-gateway.service"
 Environment=OPENCLAW_SERVICE_MARKER=openclaw
 Environment=OPENCLAW_SERVICE_KIND=gateway
 Environment=OPENCLAW_SERVICE_VERSION=2026.3.2
-Environment=ZAI_API_KEY={{ZAI_API_KEY}}
+EnvironmentFile=/root/.openclaw/.env
 
 [Install]
 WantedBy=default.target

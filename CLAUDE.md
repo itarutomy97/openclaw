@@ -7,7 +7,9 @@ OpenClaw AI Gatewayのマルチインスタンス管理リポジトリ。
 ```
 openclaw/
 ├── xserver/                    # XServer VPSインスタンス (162.43.54.40)
-│   ├── openclaw.json           # Main: LINE/Slack/Telegram (port 18789)
+│   ├── openclaw.json           # Main-LINE: LINE only (port 18789)
+│   ├── openclaw-slack.json     # Main-Slack: Slack only (port 18830)
+│   ├── openclaw-telegram.json  # Main-Telegram: Telegram only (port 18840)
 │   ├── openclaw-alpha.json     # Alpha: Discord 常識役 (port 18791)
 │   ├── openclaw-beta.json      # Beta: Discord 実行役 (port 18790)
 │   ├── openclaw-sudax.json     # Sudax: Discord スダックス (port 18800)
@@ -15,22 +17,27 @@ openclaw/
 │   ├── openclaw-onagigawa.json # Onagigawa: Discord おなぎの翁 (port 18820)
 │   ├── .env.backup             # APIキーバックアップ
 │   ├── soul/                   # SOUL.md（Bot人格・ループ防止ルール）
+│   ├── cron/                   # cronジョブ設定バックアップ（{instance}-jobs.json）
 │   ├── config/                 # systemdサービステンプレート
 │   └── scripts/                # 管理スクリプト
 ├── patches/                    # 共通パッチ（全インスタンス共通）
 └── docs/                       # 共通ドキュメント
 ```
 
-### 6-Instance Architecture
+### 8-Instance Architecture
 
-| Instance | Port | Channels | Role | State Dir | Workspace |
-|----------|------|----------|------|-----------|-----------|
-| Main | 18789 | LINE, Slack, Telegram | 汎用 | `~/.openclaw/` | `~/.openclaw/workspace` |
+| Instance | Port | Channel | Role | State Dir | Workspace |
+|----------|------|---------|------|-----------|-----------|
+| Main-LINE | 18789 | LINE only | 汎用（LINE） | `~/.openclaw/` | `~/.openclaw/workspace` |
+| Main-Slack | 18830 | Slack only | 汎用（Slack） | `~/.openclaw-slack/` | `~/.openclaw/workspace-slack` |
+| Main-Telegram | 18840 | Telegram only | 汎用（Telegram） | `~/.openclaw-telegram/` | `~/.openclaw/workspace-telegram` |
 | Alpha | 18791 | Discord only | 常識役（参謀） | `~/.openclaw-alpha/` | `~/.openclaw/workspace-alpha` |
 | Beta | 18790 | Discord only | 実行役 | `~/.openclaw-beta/` | `~/.openclaw/workspace-beta` |
 | Sudax | 18800 | Discord only | スダックス persona | `~/.openclaw-sudax/` | `~/.openclaw/workspace-sudax` |
 | Tight | 18810 | Discord only | タイトさん persona | `~/.openclaw-tight/` | `~/.openclaw/workspace-tight` |
 | Onagigawa | 18820 | Discord only | おなぎの翁 persona | `~/.openclaw-onagigawa/` | `~/.openclaw/workspace-onagigawa` |
+
+Main-LINE は Cloudflare Tunnel (`https://openclaw.deskrex.ai`) 経由で LINE webhook を受信。Main-Slack は Socket Mode（WebSocket）、Main-Telegram は polling で接続するため Tunnel 不要。
 
 Alpha と Beta は Discord 上で同じチャンネル (1484094170648805397) に参加。Sudax/Tight/Onagigawa は別チャンネル (1484387071790678067) に参加。各インスタンスは独立したメモリ・人格を持つ。Onagigawa は requireMention: false（メンション不要で反応）。
 
@@ -56,23 +63,27 @@ Alpha と Beta は Discord 上で同じチャンネル (1484094170648805397) に
 # SSH connection
 ssh root@162.43.54.40
 
-# Service management (all 3 instances)
-systemctl --user status openclaw-gateway.service          # Main
-systemctl --user status openclaw-gateway-alpha.service    # Alpha
-systemctl --user status openclaw-gateway-beta.service     # Beta
-systemctl --user status openclaw-gateway-sudax.service    # Sudax
-systemctl --user status openclaw-gateway-tight.service      # Tight
-systemctl --user status openclaw-gateway-onagigawa.service # Onagigawa
+# Service management (all 8 instances)
+systemctl --user status openclaw-gateway.service             # Main-LINE
+systemctl --user status openclaw-gateway-slack.service       # Main-Slack
+systemctl --user status openclaw-gateway-telegram.service    # Main-Telegram
+systemctl --user status openclaw-gateway-alpha.service       # Alpha
+systemctl --user status openclaw-gateway-beta.service        # Beta
+systemctl --user status openclaw-gateway-sudax.service       # Sudax
+systemctl --user status openclaw-gateway-tight.service       # Tight
+systemctl --user status openclaw-gateway-onagigawa.service   # Onagigawa
 systemctl --user restart openclaw-gateway.service
 systemctl status cloudflared
 
 # Logs
-journalctl --user -u openclaw-gateway.service -f            # Main
-journalctl --user -u openclaw-gateway-alpha.service -f      # Alpha
-journalctl --user -u openclaw-gateway-beta.service -f       # Beta
-journalctl --user -u openclaw-gateway-sudax.service -f      # Sudax
-journalctl --user -u openclaw-gateway-tight.service -f      # Tight
-journalctl --user -u openclaw-gateway-onagigawa.service -f  # Onagigawa
+journalctl --user -u openclaw-gateway.service -f             # Main-LINE
+journalctl --user -u openclaw-gateway-slack.service -f       # Main-Slack
+journalctl --user -u openclaw-gateway-telegram.service -f    # Main-Telegram
+journalctl --user -u openclaw-gateway-alpha.service -f       # Alpha
+journalctl --user -u openclaw-gateway-beta.service -f        # Beta
+journalctl --user -u openclaw-gateway-sudax.service -f       # Sudax
+journalctl --user -u openclaw-gateway-tight.service -f       # Tight
+journalctl --user -u openclaw-gateway-onagigawa.service -f   # Onagigawa
 
 # Diagnostics
 openclaw status --all
@@ -93,16 +104,18 @@ xserver/scripts/
 
 ### Workspace分離（超重要）
 
-各Discordインスタンスは `OPENCLAW_PROFILE` で workspace を分離する。
+各インスタンスは `OPENCLAW_PROFILE` で workspace を分離する。
 
-| Instance | OPENCLAW_PROFILE | Workspace Path |
-|----------|-----------------|----------------|
-| Alpha | alpha | `~/.openclaw/workspace-alpha` |
-| Beta | beta | `~/.openclaw/workspace-beta` |
-| Sudax | sudax | `~/.openclaw/workspace-sudax` |
-| Tight | tight | `~/.openclaw/workspace-tight` |
-| Onagigawa | onagigawa | `~/.openclaw/workspace-onagigawa` |
-| Main | (なし) | `~/.openclaw/workspace` |
+| Instance | OPENCLAW_PROFILE | Workspace Path | Soul Prefix |
+|----------|-----------------|----------------|-------------|
+| Main-LINE | (なし) | `~/.openclaw/workspace` | `main-line-` |
+| Main-Slack | slack | `~/.openclaw/workspace-slack` | `main-slack-` |
+| Main-Telegram | telegram | `~/.openclaw/workspace-telegram` | `main-telegram-` |
+| Alpha | alpha | `~/.openclaw/workspace-alpha` | `alpha-` |
+| Beta | beta | `~/.openclaw/workspace-beta` | `beta-` |
+| Sudax | sudax | `~/.openclaw/workspace-sudax` | `sudax-` |
+| Tight | tight | `~/.openclaw/workspace-tight` | `tight-` |
+| Onagigawa | onagigawa | `~/.openclaw/workspace-onagigawa` | `onagigawa-` |
 
 **絶対にやってはいけないこと:**
 - `~/.openclaw/workspace`（Main）にDiscord Bot用のSOUL.mdを置くこと → 全Botが同じpersonaを読む

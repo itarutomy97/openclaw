@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "jobs": [
+    {
+      "id": "b1c50383-41e9-4820-a2f3-ce74ecfae8ea",
+      "name": "Daily AI News Digest",
+      "enabled": true,
+      "createdAtMs": 1771944981182,
+      "updatedAtMs": 1774216884839,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 7 * * *",
+        "tz": "Asia/Tokyo"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Collect and summarize AI news from major regions worldwide with balanced coverage. Include: Japan, China, India, South Korea, Southeast Asia, Middle East (UAE, Saudi Arabia, Israel), Europe (UK, Germany, France, Italy), North America (US, Canada), Latin America (Brazil, Mexico), Africa (Nigeria, South Africa, Kenya), and Oceania (Australia). For each news item, ALWAYS include the source URL. Format: [Title] - Description (Source: URL). Balance coverage across regions - do not focus only on G7. Provide 2-4 items per major region."
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "telegram",
+        "to": "5228670520"
+      },
+      "state": {
+        "consecutiveErrors": 0
+      }
+    }
+  ]
+}

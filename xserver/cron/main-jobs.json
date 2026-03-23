@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "jobs": [
+    {
+      "id": "fd566d73-8940-4932-af32-2b9f4d8c2f68",
+      "name": "Daily AI News Digest (LINE Short)",
+      "enabled": true,
+      "createdAtMs": 1772507582295,
+      "updatedAtMs": 1774216906248,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 7 * * *",
+        "tz": "Asia/Tokyo"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Create a SHORT summary of AI news from major regions (Japan, China, India, Korea, Southeast Asia, Middle East, Europe, North America, Latin America, Africa, Oceania). Maximum 3-4 items total, very brief. Include source URLs. Keep total under 1000 characters for LINE."
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "line",
+        "to": "U61f5c24e1c690892660d1b6c46123143"
+      },
+      "state": {
+        "consecutiveErrors": 0
+      }
+    }
+  ]
+}
