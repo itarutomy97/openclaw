@@ -13,15 +13,15 @@
 | モデル | Z.ai GLM-4.7 |
 | 外部アクセス | Cloudflare Access保護（要Googleログイン） |
 | プラグイン | Camofox Browser 1.4.0, QMD (BM25検索) |
-| 構成 | 3インスタンス (Main/Alpha/Beta) |
+| 構成 | 3インスタンス (Main/Eleven/Johnny) |
 
 ## 5インスタンス構成
 
 | Instance | Port | State Dir | Channels | Role | Service |
 |----------|------|-----------|----------|------|---------|
 | Main | 18789 | `~/.openclaw/` | LINE, Slack, Telegram | 汎用 | `openclaw-gateway.service` |
-| Alpha | 18791 | `~/.openclaw-alpha/` | Discord | 常識役（参謀） | `openclaw-gateway-alpha.service` |
-| Beta | 18790 | `~/.openclaw-beta/` | Discord | 実行役 | `openclaw-gateway-beta.service` |
+| Eleven | 18791 | `~/.openclaw-eleven/` | Discord | 常識役（参謀） | `openclaw-gateway-eleven.service` |
+| Johnny | 18790 | `~/.openclaw-johnny/` | Discord | 実行役 | `openclaw-gateway-johnny.service` |
 | Sudax | 18800 | `~/.openclaw-sudax/` | Discord | スダックス persona | `openclaw-gateway-sudax.service` |
 | Tight | 18810 | `~/.openclaw-tight/` | Discord | タイトさん persona | `openclaw-gateway-tight.service` |
 
@@ -29,12 +29,12 @@
 
 ### Discord Bot 構成
 
-Alpha と Beta は同じ Discord チャンネルに参加し、`allowBots: "mentions"` + `requireMention: true` で互いにメンション経由で会話可能。Sudax と Tight も同様。Bot間メンションは `<@ユーザーID>` 形式で行い、ループ防止ルールは各SOUL.mdで定義。
+Eleven と Johnny は同じ Discord チャンネルに参加し、`allowBots: "mentions"` + `requireMention: true` で互いにメンション経由で会話可能。Sudax と Tight も同様。Bot間メンションは `<@ユーザーID>` 形式で行い、ループ防止ルールは各SOUL.mdで定義。
 
 | Bot | Role | Client ID | Token Env | Channel |
 |-----|------|-----------|-----------|---------|
-| OpenRex-alpha | 常識役（参謀） | 1484089242102661333 | `DISCORD_BOT_TOKEN` | 1484094170648805397 |
-| OpenRex-beta | 実行役 | 1484094945735479367 | `DISCORD_BOT_TOKEN_2` | 1484094170648805397 |
+| Eleven（エル） | 常識役（参謀） | 1484089242102661333 | `DISCORD_BOT_TOKEN` | 1484094170648805397 |
+| Johnny（ジョニー） | 実行役 | 1484094945735479367 | `DISCORD_BOT_TOKEN_2` | 1484094170648805397 |
 | スダックス | 須田仁之 persona | 1484401495439970515 | `DISCORD_BOT_TOKEN_SUDAX` | 1484387071790678067 |
 | タイト | タイトさん persona | 1484404212136939580 | `DISCORD_BOT_TOKEN_TIGHT` | 1484387071790678067 |
 
@@ -91,8 +91,8 @@ xserver/
 ├── config/
 │   ├── cloudflared.service              # Cloudflareトンネル設定
 │   ├── openclaw-gateway.service         # Main systemdサービス
-│   ├── openclaw-gateway-alpha.service   # Alpha systemdサービス
-│   └── openclaw-gateway-bot2.service    # Beta systemdサービス
+│   ├── openclaw-gateway-eleven.service  # Eleven systemdサービス
+│   └── openclaw-gateway-johnny.service  # Johnny systemdサービス
 └── scripts/
     ├── restore-vps.sh      # 完全復旧スクリプト
     ├── apply-line-patch.sh # パッチ適用スクリプト（手動用）
@@ -187,14 +187,14 @@ openclaw logs
 systemctl --user status openclaw-gateway.service
 systemctl --user restart openclaw-gateway.service
 
-# Alpha / Beta
-systemctl --user status openclaw-gateway-alpha.service
-systemctl --user status openclaw-gateway-bot2.service
+# Eleven / Johnny
+systemctl --user status openclaw-gateway-eleven.service
+systemctl --user status openclaw-gateway-johnny.service
 
 # 全インスタンスのログ
 journalctl --user -u openclaw-gateway.service -f          # Main
-journalctl --user -u openclaw-gateway-alpha.service -f    # Alpha
-journalctl --user -u openclaw-gateway-bot2.service -f     # Beta
+journalctl --user -u openclaw-gateway-eleven.service -f   # Eleven
+journalctl --user -u openclaw-gateway-johnny.service -f   # Johnny
 ```
 
 ## 外部アクセス
@@ -294,16 +294,16 @@ ZAI_API_KEY=d8179e04264a4ab9add1a08e60481372.EpG4UtsMwtyILuEK
 | Webhook URL | https://openclaw.deskrex.ai/line/webhook |
 | 環境変数 | `LINE_CHANNEL_ACCESS_TOKEN`, `LINE_CHANNEL_SECRET` |
 
-### Discord Bots (Alpha / Beta)
+### Discord Bots (Eleven / Johnny)
 
-| 項目 | Alpha | Beta |
+| 項目 | Eleven | Johnny |
 |------|-------|------|
-| Bot名 | OpenRex-alpha | OpenRex-beta |
+| Bot名 | Eleven（エル） | Johnny（ジョニー） |
 | Role | 常識役（参謀） | 実行役 |
 | Client ID | 1484089242102661333 | 1484094945735479367 |
 | Token env | `DISCORD_BOT_TOKEN` | `DISCORD_BOT_TOKEN_2` |
-| Instance | Alpha (port 18791) | Beta (port 18790) |
-| State Dir | `~/.openclaw-alpha/` | `~/.openclaw-beta/` |
+| Instance | Eleven (port 18791) | Johnny (port 18790) |
+| State Dir | `~/.openclaw-eleven/` | `~/.openclaw-johnny/` |
 
 **設定ポイント:**
 - `allowBots: true` - Bot同士の会話を有効化（v2026.3.2は"mentions"未対応、ループ防止はSOUL.mdで制御）

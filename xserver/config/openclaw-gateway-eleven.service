@@ -1,5 +1,5 @@
 [Unit]
-Description=OpenClaw Gateway Alpha (v2026.3.2)
+Description=OpenClaw Gateway Eleven (v2026.3.2)
 After=network-online.target
 Wants=network-online.target
 
@@ -9,10 +9,10 @@ Restart=always
 RestartSec=5
 KillMode=process
 Environment=HOME=/root
-Environment=OPENCLAW_STATE_DIR=/root/.openclaw-alpha
-Environment=OPENCLAW_PROFILE=alpha
+Environment=OPENCLAW_STATE_DIR=/root/.openclaw-eleven
+Environment=OPENCLAW_PROFILE=eleven
 Environment=OPENCLAW_GATEWAY_PORT=18791
-Environment="OPENCLAW_SYSTEMD_UNIT=openclaw-gateway-alpha.service"
+Environment="OPENCLAW_SYSTEMD_UNIT=openclaw-gateway-eleven.service"
 Environment=OPENCLAW_SERVICE_MARKER=openclaw
 Environment=OPENCLAW_SERVICE_KIND=gateway
 Environment=OPENCLAW_SERVICE_VERSION=2026.3.2

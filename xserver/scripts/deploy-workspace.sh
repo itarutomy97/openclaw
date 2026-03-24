@@ -2,7 +2,7 @@
 # deploy-workspace.sh - Deploy workspace files (SOUL.md, AGENTS.md, etc.) to VPS
 #
 # Usage: ./deploy-workspace.sh [instance|all]
-#   instance: alpha, beta, sudax, tight, onagigawa, main-line, main-slack, main-telegram, all
+#   instance: eleven, johnny, sudax, tight, onagigawa, main-line, main-slack, main-telegram, all
 #   default: all
 #
 # Also syncs API keys (BRAVE_API_KEY, TAVILY_API_KEY) from Main .env to all instances
@@ -71,8 +71,8 @@ deploy_instance() {
 # Define all instances with their soul prefix and workspace path
 deploy_all() {
     # Discord instances
-    deploy_instance "alpha"          "alpha"          "/root/.openclaw/workspace-alpha"
-    deploy_instance "beta"           "beta"           "/root/.openclaw/workspace-beta"
+    deploy_instance "eleven"         "eleven"         "/root/.openclaw/workspace-eleven"
+    deploy_instance "johnny"         "johnny"         "/root/.openclaw/workspace-johnny"
     deploy_instance "sudax"          "sudax"          "/root/.openclaw/workspace-sudax"
     deploy_instance "tight"          "tight"          "/root/.openclaw/workspace-tight"
     deploy_instance "onagigawa"      "onagigawa"      "/root/.openclaw/workspace-onagigawa"
@@ -87,7 +87,7 @@ if [ "$INSTANCES" = "all" ]; then
     deploy_all
 else
     case "$INSTANCES" in
-        alpha|beta|sudax|tight|onagigawa)
+        eleven|johnny|sudax|tight|onagigawa)
             deploy_instance "$INSTANCES" "$INSTANCES" "/root/.openclaw/workspace-${INSTANCES}"
             ;;
         main-line)
@@ -101,7 +101,7 @@ else
             ;;
         *)
             echo "Unknown instance: $INSTANCES"
-            echo "Valid: alpha, beta, sudax, tight, onagigawa, main-line, main-slack, main-telegram, all"
+            echo "Valid: eleven, johnny, sudax, tight, onagigawa, main-line, main-slack, main-telegram, all"
             exit 1
             ;;
     esac
@@ -110,7 +110,7 @@ fi
 echo ""
 echo "=== Syncing API keys to all instances ==="
 MAIN_ENV="/root/.openclaw/.env"
-ALL_INSTANCES="alpha beta sudax tight onagigawa slack telegram"
+ALL_INSTANCES="eleven johnny sudax tight onagigawa slack telegram"
 for key in BRAVE_API_KEY TAVILY_API_KEY ZAI_API_KEY; do
     VAL=$(grep "^${key}=" "$MAIN_ENV" 2>/dev/null | head -1 | sed "s/^${key}=//")
     if [ -n "$VAL" ]; then
@@ -137,7 +137,7 @@ echo "  done"
 
 echo ""
 echo "=== Restarting services ==="
-ALL_SERVICES="openclaw-gateway.service openclaw-gateway-alpha.service openclaw-gateway-beta.service openclaw-gateway-sudax.service openclaw-gateway-tight.service openclaw-gateway-onagigawa.service openclaw-gateway-slack.service openclaw-gateway-telegram.service"
+ALL_SERVICES="openclaw-gateway.service openclaw-gateway-eleven.service openclaw-gateway-johnny.service openclaw-gateway-sudax.service openclaw-gateway-tight.service openclaw-gateway-onagigawa.service openclaw-gateway-slack.service openclaw-gateway-telegram.service"
 
 if [ "$INSTANCES" = "all" ]; then
     systemctl --user restart $ALL_SERVICES

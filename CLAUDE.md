@@ -10,8 +10,8 @@ openclaw/
 │   ├── openclaw.json           # Main-LINE: LINE only (port 18789)
 │   ├── openclaw-slack.json     # Main-Slack: Slack only (port 18830)
 │   ├── openclaw-telegram.json  # Main-Telegram: Telegram only (port 18840)
-│   ├── openclaw-alpha.json     # Alpha: Discord 常識役 (port 18791)
-│   ├── openclaw-beta.json      # Beta: Discord 実行役 (port 18790)
+│   ├── openclaw-eleven.json    # Eleven: Discord 常識役 (port 18791)
+│   ├── openclaw-johnny.json    # Johnny: Discord 実行役 (port 18790)
 │   ├── openclaw-sudax.json     # Sudax: Discord スダックス (port 18800)
 │   ├── openclaw-tight.json     # Tight: Discord タイトさん (port 18810)
 │   ├── openclaw-onagigawa.json # Onagigawa: Discord おなぎの翁 (port 18820)
@@ -31,15 +31,15 @@ openclaw/
 | Main-LINE | 18789 | LINE only | 汎用（LINE） | `~/.openclaw/` | `~/.openclaw/workspace` |
 | Main-Slack | 18830 | Slack only | 汎用（Slack） | `~/.openclaw-slack/` | `~/.openclaw/workspace-slack` |
 | Main-Telegram | 18840 | Telegram only | 汎用（Telegram） | `~/.openclaw-telegram/` | `~/.openclaw/workspace-telegram` |
-| Alpha | 18791 | Discord only | 常識役（参謀） | `~/.openclaw-alpha/` | `~/.openclaw/workspace-alpha` |
-| Beta | 18790 | Discord only | 実行役 | `~/.openclaw-beta/` | `~/.openclaw/workspace-beta` |
+| Eleven | 18791 | Discord only | 常識役（参謀） | `~/.openclaw-eleven/` | `~/.openclaw/workspace-eleven` |
+| Johnny | 18790 | Discord only | 実行役 | `~/.openclaw-johnny/` | `~/.openclaw/workspace-johnny` |
 | Sudax | 18800 | Discord only | スダックス persona | `~/.openclaw-sudax/` | `~/.openclaw/workspace-sudax` |
 | Tight | 18810 | Discord only | タイトさん persona | `~/.openclaw-tight/` | `~/.openclaw/workspace-tight` |
 | Onagigawa | 18820 | Discord only | おなぎの翁 persona | `~/.openclaw-onagigawa/` | `~/.openclaw/workspace-onagigawa` |
 
 Main-LINE は Cloudflare Tunnel (`https://openclaw.deskrex.ai`) 経由で LINE webhook を受信。Main-Slack は Socket Mode（WebSocket）、Main-Telegram は polling で接続するため Tunnel 不要。
 
-Alpha と Beta は Discord 上で同じチャンネル (1484094170648805397) に参加。Sudax/Tight/Onagigawa は別チャンネル (1484387071790678067) に参加。各インスタンスは独立したメモリ・人格を持つ。Onagigawa は requireMention: false（メンション不要で反応）。
+Eleven と Johnny は Discord 上で同じチャンネル (1484094170648805397) に参加。Sudax/Tight/Onagigawa は別チャンネル (1484387071790678067) に参加。各インスタンスは独立したメモリ・人格を持つ。Onagigawa は requireMention: false（メンション不要で反応）。
 
 ### Bot間通信設定
 
@@ -67,8 +67,8 @@ ssh root@162.43.54.40
 systemctl --user status openclaw-gateway.service             # Main-LINE
 systemctl --user status openclaw-gateway-slack.service       # Main-Slack
 systemctl --user status openclaw-gateway-telegram.service    # Main-Telegram
-systemctl --user status openclaw-gateway-alpha.service       # Alpha
-systemctl --user status openclaw-gateway-beta.service        # Beta
+systemctl --user status openclaw-gateway-eleven.service      # Eleven
+systemctl --user status openclaw-gateway-johnny.service      # Johnny
 systemctl --user status openclaw-gateway-sudax.service       # Sudax
 systemctl --user status openclaw-gateway-tight.service       # Tight
 systemctl --user status openclaw-gateway-onagigawa.service   # Onagigawa
@@ -79,8 +79,8 @@ systemctl status cloudflared
 journalctl --user -u openclaw-gateway.service -f             # Main-LINE
 journalctl --user -u openclaw-gateway-slack.service -f       # Main-Slack
 journalctl --user -u openclaw-gateway-telegram.service -f    # Main-Telegram
-journalctl --user -u openclaw-gateway-alpha.service -f       # Alpha
-journalctl --user -u openclaw-gateway-beta.service -f        # Beta
+journalctl --user -u openclaw-gateway-eleven.service -f      # Eleven
+journalctl --user -u openclaw-gateway-johnny.service -f      # Johnny
 journalctl --user -u openclaw-gateway-sudax.service -f       # Sudax
 journalctl --user -u openclaw-gateway-tight.service -f       # Tight
 journalctl --user -u openclaw-gateway-onagigawa.service -f   # Onagigawa
@@ -111,8 +111,8 @@ xserver/scripts/
 | Main-LINE | (なし) | `~/.openclaw/workspace` | `main-line-` |
 | Main-Slack | slack | `~/.openclaw/workspace-slack` | `main-slack-` |
 | Main-Telegram | telegram | `~/.openclaw/workspace-telegram` | `main-telegram-` |
-| Alpha | alpha | `~/.openclaw/workspace-alpha` | `alpha-` |
-| Beta | beta | `~/.openclaw/workspace-beta` | `beta-` |
+| Eleven | eleven | `~/.openclaw/workspace-eleven` | `eleven-` |
+| Johnny | johnny | `~/.openclaw/workspace-johnny` | `johnny-` |
 | Sudax | sudax | `~/.openclaw/workspace-sudax` | `sudax-` |
 | Tight | tight | `~/.openclaw/workspace-tight` | `tight-` |
 | Onagigawa | onagigawa | `~/.openclaw/workspace-onagigawa` | `onagigawa-` |
@@ -134,7 +134,7 @@ xserver/scripts/
 - **Workspace deploy**: SOUL.md等を更新したら必ず `deploy-workspace.sh` を使う（手動cpは禁止 → パスミス防止）
 - **Session clear**: workspace更新後は必ずセッション削除 → `rm -rf ~/.openclaw-*/agents/*/sessions/*`
 - **ZAI_API_KEY**: Must be in each instance's `.env`, NOT openclaw.json
-- **OPENCLAW_STATE_DIR**: Alpha/Beta の独立は環境変数 `OPENCLAW_STATE_DIR` で実現（systemd service file で設定）
+- **OPENCLAW_STATE_DIR**: Eleven/Johnny の独立は環境変数 `OPENCLAW_STATE_DIR` で実現（systemd service file で設定）
 - **LINE patch**: Required for v2026.2.17+ - auto-line-patch.sh が ExecStartPre で毎起動時に自動適用
 - **Health check**: `/root/openclaw/xserver/scripts/health-check.sh` が cron で毎時自動実行
 
@@ -150,8 +150,8 @@ xserver/scripts/
 - **LINE Bot**: @785sznop (OpenRex) - Main instance
 - **Telegram Bot**: @openrex_bot - Main instance
 - **Slack App**: A0AG7UDV57D (Socket Mode) - Main instance
-- **Discord Bot Alpha**: OpenRex-alpha (常識役, client_id: 1484089242102661333) - Alpha instance
-- **Discord Bot Beta**: OpenRex-beta (実行役, client_id: 1484094945735479367) - Beta instance
+- **Discord Bot Eleven**: Eleven（エル）(常識役, client_id: 1484089242102661333) - Eleven instance
+- **Discord Bot Johnny**: Johnny Joestar（ジョニー）(実行役, client_id: 1484094945735479367) - Johnny instance
 - **Discord Bot Sudax**: スダックス (須田仁之 persona, client_id: 1484401495439970515) - Sudax instance
 - **Discord Bot Tight**: タイト (タイトさん/ユウキ persona, client_id: 1484404212136939580) - Tight instance
 - **Discord Bot Onagigawa**: おなぎの翁 (小名木川 persona, client_id: 1484475707097878528) - Onagigawa instance

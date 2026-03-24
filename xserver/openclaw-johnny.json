@@ -1,0 +1,98 @@
+{
+  "meta": {
+    "lastTouchedVersion": "2026.3.2",
+    "lastTouchedAt": "2026-03-19T00:00:00.000Z"
+  },
+  "browser": {
+    "executablePath": "/snap/brave/600/opt/brave.com/brave/brave-browser",
+    "headless": true,
+    "noSandbox": true
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "zai/glm-4.7"
+      },
+      "compaction": {
+        "mode": "safeguard"
+      }
+    }
+  },
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto",
+    "restart": true,
+    "ownerDisplay": "raw"
+  },
+  "channels": {
+    "discord": {
+      "enabled": true,
+      "token": {
+        "source": "env",
+        "provider": "default",
+        "id": "DISCORD_BOT_TOKEN_2"
+      },
+      "dmPolicy": "open",
+      "groupPolicy": "allowlist",
+      "allowBots": true,
+      "allowFrom": [
+        "*"
+      ],
+      "guilds": {
+        "1473906830160953548": {
+          "requireMention": true,
+          "channels": {
+            "1473906830618136699": { "allow": true, "requireMention": true },
+            "1484094170648805397": { "allow": true, "requireMention": true },
+            "1484465639170117793": { "allow": true, "requireMention": true },
+            "1484387071790678067": { "allow": true, "requireMention": true }
+          }
+        }
+      },
+      "streaming": "off",
+      "historyLimit": 20,
+      "textChunkLimit": 2000
+    }
+  },
+  "gateway": {
+    "port": 18790,
+    "mode": "remote",
+    "controlUi": {
+      "allowedOrigins": [
+        "https://openclaw.deskrex.ai"
+      ]
+    },
+    "auth": {
+      "mode": "none"
+    },
+    "trustedProxies": [
+      "127.0.0.1",
+      "::1",
+      "173.245.48.0/20",
+      "103.21.244.0/22",
+      "103.22.200.0/22",
+      "103.31.4.0/22",
+      "141.101.64.0/18",
+      "108.162.192.0/18",
+      "190.93.240.0/20",
+      "188.114.96.0/20",
+      "197.234.240.0/22",
+      "198.41.128.0/17",
+      "162.158.0.0/15",
+      "104.16.0.0/13",
+      "104.24.0.0/14",
+      "172.64.0.0/13",
+      "131.0.72.0/22"
+    ]
+  },
+  "plugins": {
+    "entries": {
+      "discord": {
+        "enabled": true
+      },
+      "camofox-browser": {
+        "enabled": true
+      }
+    }
+  }
+}

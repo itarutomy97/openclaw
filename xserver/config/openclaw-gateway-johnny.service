@@ -1,11 +1,5 @@
-# OpenClaw Gateway Beta systemd service template
-# Discord executor bot instance on port 18790
-# Variables to be replaced during restore:
-#   /root/.nvm/versions/node/v24.13.1/bin/node -> /root/.nvm/versions/node/v24.13.1/bin/node
-#   /root/.nvm/versions/node/v24.13.1/bin/../lib/node_modules/openclaw/dist/index.js -> /root/.nvm/versions/node/v24.13.1/lib/node_modules/openclaw/dist/index.js
-
 [Unit]
-Description=OpenClaw Gateway Beta (v2026.3.2)
+Description=OpenClaw Gateway Johnny (v2026.3.2)
 After=network-online.target
 Wants=network-online.target
 
@@ -15,10 +9,10 @@ Restart=always
 RestartSec=5
 KillMode=process
 Environment=HOME=/root
-Environment=OPENCLAW_STATE_DIR=/root/.openclaw-beta
-Environment=OPENCLAW_PROFILE=beta
+Environment=OPENCLAW_STATE_DIR=/root/.openclaw-johnny
+Environment=OPENCLAW_PROFILE=johnny
 Environment=OPENCLAW_GATEWAY_PORT=18790
-Environment="OPENCLAW_SYSTEMD_UNIT=openclaw-gateway-beta.service"
+Environment="OPENCLAW_SYSTEMD_UNIT=openclaw-gateway-johnny.service"
 Environment=OPENCLAW_SERVICE_MARKER=openclaw
 Environment=OPENCLAW_SERVICE_KIND=gateway
 Environment=OPENCLAW_SERVICE_VERSION=2026.3.2
