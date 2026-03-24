@@ -38,3 +38,11 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 ---
 
 Add whatever helps you do your job. This is your cheat sheet.
+
+
+## Browser / Web Browsing
+
+- **ブラウジングには必ず Camofox (camofox_create_tab) を優先使用する**
+- web_fetch で 403/429 やCloudflareブロックが出た場合は、Camofox でページを開いてスクリーンショットやテキスト取得を行う
+- 調査・リサーチ時はスクリーンショットを積極的に活用して、視覚的な情報も共有する
+- Camofox が使えない場合のみ web_fetch にフォールバック
