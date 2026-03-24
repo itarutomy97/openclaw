@@ -41,7 +41,7 @@
   },
   "gateway": {
     "port": 18840,
-    "mode": "remote",
+    "mode": "local",
     "controlUi": {
       "allowedOrigins": [
         "https://openclaw.deskrex.ai"
