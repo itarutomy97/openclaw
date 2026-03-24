@@ -16,8 +16,7 @@ Environment="OPENCLAW_SYSTEMD_UNIT=openclaw-gateway-eleven.service"
 Environment=OPENCLAW_SERVICE_MARKER=openclaw
 Environment=OPENCLAW_SERVICE_KIND=gateway
 Environment=OPENCLAW_SERVICE_VERSION=2026.3.2
-Environment=ZAI_API_KEY=${ZAI_API_KEY}
-Environment=DISCORD_BOT_TOKEN=${DISCORD_BOT_TOKEN}
+EnvironmentFile=/root/.openclaw-eleven/.env
 
 [Install]
 WantedBy=default.target
