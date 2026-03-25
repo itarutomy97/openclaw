@@ -63,11 +63,7 @@
       ]
     },
     "auth": {
-      "mode": "token",
-      "token": {
-        "source": "env",
-        "id": "OPENCLAW_GATEWAY_TOKEN"
-      }
+      "mode": "none"
     },
     "trustedProxies": [
       "127.0.0.1",
