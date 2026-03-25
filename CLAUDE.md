@@ -160,7 +160,7 @@ xserver/scripts/
 - **Discord Bot Sudax**: スダックス (須田仁之 persona, client_id: 1484401495439970515) - Sudax instance
 - **Discord Bot Tight**: タイト (タイトさん/ユウキ persona, client_id: 1484404212136939580) - Tight instance
 - **Discord Bot Onagigawa**: おなぎの翁 (小名木川 persona, client_id: 1484475707097878528) - Onagigawa instance
-- **Discord Bot itarutomy**: @itarutomy クローンAI (冨田到 persona, client_id: 1486154284377575325) - itarutomy instance
+- **Discord Bot itarutomy**: @itarutomy クローンAI (冨田到 persona, client_id: 1486154284377575525) - itarutomy instance
 - **Discord Server**: 1473906830160953548
 - **Cloudflare Tunnel**: openclaw.deskrex.ai
 - **Brave Search API**: キー in `xserver/.env.backup`、全インスタンスの `.env` に設定済み
