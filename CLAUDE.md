@@ -15,6 +15,7 @@ openclaw/
 │   ├── openclaw-sudax.json     # Sudax: Discord スダックス (port 18800)
 │   ├── openclaw-tight.json     # Tight: Discord タイトさん (port 18810)
 │   ├── openclaw-onagigawa.json # Onagigawa: Discord おなぎの翁 (port 18820)
+│   ├── openclaw-itarutomy.json # itarutomy: Discord @itarutomy クローン (port 18850)
 │   ├── .env.backup             # APIキーバックアップ
 │   ├── soul/                   # SOUL.md（Bot人格・ループ防止ルール）
 │   ├── cron/                   # cronジョブ設定バックアップ（{instance}-jobs.json）
@@ -24,7 +25,7 @@ openclaw/
 └── docs/                       # 共通ドキュメント
 ```
 
-### 8-Instance Architecture
+### 9-Instance Architecture
 
 | Instance | Port | Channel | Role | State Dir | Workspace |
 |----------|------|---------|------|-----------|-----------|
@@ -36,6 +37,7 @@ openclaw/
 | Sudax | 18800 | Discord only | スダックス persona | `~/.openclaw-sudax/` | `~/.openclaw/workspace-sudax` |
 | Tight | 18810 | Discord only | タイトさん persona | `~/.openclaw-tight/` | `~/.openclaw/workspace-tight` |
 | Onagigawa | 18820 | Discord only | おなぎの翁 persona | `~/.openclaw-onagigawa/` | `~/.openclaw/workspace-onagigawa` |
+| itarutomy | 18850 | Discord only | @itarutomy クローン | `~/.openclaw-itarutomy/` | `~/.openclaw/workspace-itarutomy` |
 
 Main-LINE は Cloudflare Tunnel (`https://openclaw.deskrex.ai`) 経由で LINE webhook を受信。Main-Slack は Socket Mode（WebSocket）、Main-Telegram は polling で接続するため Tunnel 不要。
 
@@ -63,7 +65,7 @@ Eleven と Johnny は Discord 上で同じチャンネル (1484094170648805397) 
 # SSH connection
 ssh root@162.43.54.40
 
-# Service management (all 8 instances)
+# Service management (all 9 instances)
 systemctl --user status openclaw-gateway.service             # Main-LINE
 systemctl --user status openclaw-gateway-slack.service       # Main-Slack
 systemctl --user status openclaw-gateway-telegram.service    # Main-Telegram
@@ -72,6 +74,7 @@ systemctl --user status openclaw-gateway-johnny.service      # Johnny
 systemctl --user status openclaw-gateway-sudax.service       # Sudax
 systemctl --user status openclaw-gateway-tight.service       # Tight
 systemctl --user status openclaw-gateway-onagigawa.service   # Onagigawa
+systemctl --user status openclaw-gateway-itarutomy.service   # itarutomy
 systemctl --user restart openclaw-gateway.service
 systemctl status cloudflared
 
@@ -84,6 +87,7 @@ journalctl --user -u openclaw-gateway-johnny.service -f      # Johnny
 journalctl --user -u openclaw-gateway-sudax.service -f       # Sudax
 journalctl --user -u openclaw-gateway-tight.service -f       # Tight
 journalctl --user -u openclaw-gateway-onagigawa.service -f   # Onagigawa
+journalctl --user -u openclaw-gateway-itarutomy.service -f   # itarutomy
 
 # Diagnostics
 openclaw status --all
@@ -116,6 +120,7 @@ xserver/scripts/
 | Sudax | sudax | `~/.openclaw/workspace-sudax` | `sudax-` |
 | Tight | tight | `~/.openclaw/workspace-tight` | `tight-` |
 | Onagigawa | onagigawa | `~/.openclaw/workspace-onagigawa` | `onagigawa-` |
+| itarutomy | itarutomy | `~/.openclaw/workspace-itarutomy` | `itarutomy-` |
 
 **絶対にやってはいけないこと:**
 - `~/.openclaw/workspace`（Main）にDiscord Bot用のSOUL.mdを置くこと → 全Botが同じpersonaを読む
@@ -155,6 +160,7 @@ xserver/scripts/
 - **Discord Bot Sudax**: スダックス (須田仁之 persona, client_id: 1484401495439970515) - Sudax instance
 - **Discord Bot Tight**: タイト (タイトさん/ユウキ persona, client_id: 1484404212136939580) - Tight instance
 - **Discord Bot Onagigawa**: おなぎの翁 (小名木川 persona, client_id: 1484475707097878528) - Onagigawa instance
+- **Discord Bot itarutomy**: @itarutomy クローンAI (冨田到 persona, client_id: 1486154284377575325) - itarutomy instance
 - **Discord Server**: 1473906830160953548
 - **Cloudflare Tunnel**: openclaw.deskrex.ai
 - **Brave Search API**: キー in `xserver/.env.backup`、全インスタンスの `.env` に設定済み

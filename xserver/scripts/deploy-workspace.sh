@@ -2,7 +2,7 @@
 # deploy-workspace.sh - Deploy workspace files (SOUL.md, AGENTS.md, etc.) to VPS
 #
 # Usage: ./deploy-workspace.sh [instance|all]
-#   instance: eleven, johnny, sudax, tight, onagigawa, main-line, main-slack, main-telegram, all
+#   instance: eleven, johnny, sudax, tight, onagigawa, itarutomy, main-line, main-slack, main-telegram, all
 #   default: all
 #
 # Also syncs API keys (BRAVE_API_KEY, TAVILY_API_KEY) from Main .env to all instances
@@ -76,6 +76,7 @@ deploy_all() {
     deploy_instance "sudax"          "sudax"          "/root/.openclaw/workspace-sudax"
     deploy_instance "tight"          "tight"          "/root/.openclaw/workspace-tight"
     deploy_instance "onagigawa"      "onagigawa"      "/root/.openclaw/workspace-onagigawa"
+    deploy_instance "itarutomy"      "itarutomy"      "/root/.openclaw/workspace-itarutomy"
 
     # Main channel instances
     deploy_instance "main-line"      "main-line"      "/root/.openclaw/workspace"
@@ -87,7 +88,7 @@ if [ "$INSTANCES" = "all" ]; then
     deploy_all
 else
     case "$INSTANCES" in
-        eleven|johnny|sudax|tight|onagigawa)
+        eleven|johnny|sudax|tight|onagigawa|itarutomy)
             deploy_instance "$INSTANCES" "$INSTANCES" "/root/.openclaw/workspace-${INSTANCES}"
             ;;
         main-line)
@@ -101,7 +102,7 @@ else
             ;;
         *)
             echo "Unknown instance: $INSTANCES"
-            echo "Valid: eleven, johnny, sudax, tight, onagigawa, main-line, main-slack, main-telegram, all"
+            echo "Valid: eleven, johnny, sudax, tight, onagigawa, itarutomy, main-line, main-slack, main-telegram, all"
             exit 1
             ;;
     esac
@@ -110,7 +111,7 @@ fi
 echo ""
 echo "=== Syncing API keys to all instances ==="
 MAIN_ENV="/root/.openclaw/.env"
-ALL_INSTANCES="eleven johnny sudax tight onagigawa slack telegram"
+ALL_INSTANCES="eleven johnny sudax tight onagigawa itarutomy slack telegram"
 for key in BRAVE_API_KEY TAVILY_API_KEY ZAI_API_KEY; do
     VAL=$(grep "^${key}=" "$MAIN_ENV" 2>/dev/null | head -1 | sed "s/^${key}=//")
     if [ -n "$VAL" ]; then
@@ -137,7 +138,7 @@ echo "  done"
 
 echo ""
 echo "=== Restarting services ==="
-ALL_SERVICES="openclaw-gateway.service openclaw-gateway-eleven.service openclaw-gateway-johnny.service openclaw-gateway-sudax.service openclaw-gateway-tight.service openclaw-gateway-onagigawa.service openclaw-gateway-slack.service openclaw-gateway-telegram.service"
+ALL_SERVICES="openclaw-gateway.service openclaw-gateway-eleven.service openclaw-gateway-johnny.service openclaw-gateway-sudax.service openclaw-gateway-tight.service openclaw-gateway-onagigawa.service openclaw-gateway-itarutomy.service openclaw-gateway-slack.service openclaw-gateway-telegram.service"
 
 if [ "$INSTANCES" = "all" ]; then
     systemctl --user restart $ALL_SERVICES

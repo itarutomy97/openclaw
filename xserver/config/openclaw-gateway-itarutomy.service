@@ -1,0 +1,22 @@
+[Unit]
+Description=OpenClaw Gateway itarutomy (v2026.3.2)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=/root/.nvm/versions/node/v24.13.1/bin/node /root/.nvm/versions/node/v24.13.1/lib/node_modules/openclaw/dist/index.js gateway --port 18850 --allow-unconfigured
+Restart=always
+RestartSec=5
+KillMode=process
+EnvironmentFile=/root/.openclaw-itarutomy/.env
+Environment=HOME=/root
+Environment=OPENCLAW_STATE_DIR=/root/.openclaw-itarutomy
+Environment=OPENCLAW_PROFILE=itarutomy
+Environment=OPENCLAW_GATEWAY_PORT=18850
+Environment=OPENCLAW_SYSTEMD_UNIT=openclaw-gateway-itarutomy.service
+Environment=OPENCLAW_SERVICE_MARKER=openclaw
+Environment=OPENCLAW_SERVICE_KIND=gateway
+Environment=OPENCLAW_SERVICE_VERSION=2026.3.2
+
+[Install]
+WantedBy=default.target
