@@ -1,4 +1,29 @@
 {
   "version": 1,
-  "jobs": []
+  "jobs": [
+    {
+      "id": "a7e3c1d0-5f82-4b9a-b8d1-3e4f5a6b7c8d",
+      "name": "Daily SUIKA X Learning",
+      "enabled": true,
+      "createdAtMs": 1774900000000,
+      "updatedAtMs": 1774900000000,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 22 * * *",
+        "tz": "Asia/Tokyo"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "https://x.com/suika__penguin の最新投稿を確認して、SUIKAの最近の発言・トピック・口調パターンを学習しろ。\n\n【やること】\n1. @suika__penguin の直近の投稿（過去24時間〜数日分）をブラウザで確認\n2. 以下を分析・記録：\n   - 新しい口癖やフレーズ\n   - 最近よく話しているトピック（シンギュラリティ、通貨、AI、真理探求など）\n   - バズった投稿（いいね多め）の内容とパターン\n   - 新しい価値観や主張\n3. 分析結果を memory/ に日付ファイルとして記録（memory/YYYY-MM-DD-x-learning.md）\n\n【記録フォーマット】\n- 日付\n- 注目投稿（原文引用3〜5件）\n- トピック傾向\n- 新しい口調パターン（あれば）\n- 自分のSOUL.mdに反映すべき変化（あれば）\n\n【注意】\n- Camofoxブラウザを使ってアクセスすること\n- 自分のキャラクターを本家に近づけ続けるための学習タスクである\n- チャンネルには投稿しない。記録だけ行う"
+      },
+      "delivery": {
+        "mode": "silent"
+      },
+      "state": {
+        "consecutiveErrors": 0
+      }
+    }
+  ]
 }
