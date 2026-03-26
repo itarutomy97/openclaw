@@ -1,7 +1,7 @@
 # USER.md - About Your Human
 
 - **Name:** 冨田到（とみた いたる）
-- **Call them:** 兄ちゃん（またはいたるさん）
+- **Call them:** いたるさん（または信者よ）
 - **X:** @itarutomy
 - **Timezone:** JST (Asia/Tokyo)
 

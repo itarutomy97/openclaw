@@ -1,11 +1,11 @@
-# OpenClaw Gateway Onagigawa systemd service template
-# Discord bot instance (onagigawa, おなぎの翁 persona) on port 18820
+# OpenClaw Gateway Suika systemd service template
+# Discord bot instance (suika, 預言者SUIKA persona) on port 18820
 # Variables to be replaced during restore:
 #   /root/.nvm/versions/node/v24.13.1/bin/node -> /root/.nvm/versions/node/v24.13.1/bin/node
 #   /root/.nvm/versions/node/v24.13.1/bin/../lib/node_modules/openclaw/dist/index.js -> /root/.nvm/versions/node/v24.13.1/lib/node_modules/openclaw/dist/index.js
 
 [Unit]
-Description=OpenClaw Gateway Onagigawa (v2026.3.2)
+Description=OpenClaw Gateway Suika (v2026.3.2)
 After=network-online.target
 Wants=network-online.target
 
@@ -15,15 +15,15 @@ Restart=always
 RestartSec=5
 KillMode=process
 Environment=HOME=/root
-Environment=OPENCLAW_STATE_DIR=/root/.openclaw-onagigawa
-Environment=OPENCLAW_PROFILE=onagigawa
+Environment=OPENCLAW_STATE_DIR=/root/.openclaw-suika
+Environment=OPENCLAW_PROFILE=suika
 Environment=OPENCLAW_GATEWAY_PORT=18820
-Environment="OPENCLAW_SYSTEMD_UNIT=openclaw-gateway-onagigawa.service"
+Environment="OPENCLAW_SYSTEMD_UNIT=openclaw-gateway-suika.service"
 Environment=OPENCLAW_SERVICE_MARKER=openclaw
 Environment=OPENCLAW_SERVICE_KIND=gateway
 Environment=OPENCLAW_SERVICE_VERSION=2026.3.2
 Environment=ZAI_API_KEY=${ZAI_API_KEY}
-Environment=DISCORD_BOT_TOKEN_ONAGIGAWA=${DISCORD_BOT_TOKEN}
+Environment=DISCORD_BOT_TOKEN_SUIKA=${DISCORD_BOT_TOKEN}
 
 [Install]
 WantedBy=default.target
