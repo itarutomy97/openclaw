@@ -41,11 +41,14 @@ openclaw/
 
 Main-LINE は Cloudflare Tunnel (`https://openclaw.deskrex.ai`) 経由で LINE webhook を受信。Main-Slack は Socket Mode（WebSocket）、Main-Telegram は polling で接続するため Tunnel 不要。
 
-Eleven と Johnny は Discord 上で同じチャンネル (1484094170648805397) に参加。Sudax/Tight/Suika は別チャンネル (1484387071790678067) に参加。各インスタンスは独立したメモリ・人格を持つ。Suika は requireMention: false（メンション不要で反応）。
+Eleven と Johnny は Discord 上で同じチャンネル (1484094170648805397) に参加。Sudax/Tight/Suika は別チャンネル (1484387071790678067) に参加。各インスタンスは独立したメモリ・人格を持つ。
 
-### Bot間通信設定
+### Discord Bot 共通設定
 
-- `allowBots: true` - Bot同士の会話を有効化（v2026.3.2は"mentions"未対応）
+全Discord Botインスタンス（Eleven/Johnny/Sudax/Tight/Suika/itarutomy）の openclaw.json 設定:
+- `streaming: "off"` — ストリーミング無効（一括送信）
+- `requireMention: true` — メンション必須（メンションされたときだけ反応）
+- `allowBots: true` — Bot同士の会話を有効化（v2026.3.2は"mentions"未対応）
 - Bot間メンションは `<@ユーザーID>` 形式で行う（テキスト "@BotB" では反応しない）
 - 各BotのSOUL.md (`xserver/soul/`) にループ防止ルール・相手BotのIDテーブルを定義
 - スレッド内では初回メンション後、以降はメンション不要で会話継続可能
