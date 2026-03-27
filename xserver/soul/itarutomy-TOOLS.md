@@ -8,6 +8,9 @@ Skills define _how_ tools work. This file is for _your_ specifics — the stuff 
 - web_fetch で 403/429 やCloudflareブロックが出た場合は、Camofox でページを開いてスクリーンショットやテキスト取得を行う
 - 調査・リサーチ時はスクリーンショットを積極的に活用して、視覚的な情報も共有する
 - Camofox が使えない場合のみ web_fetch にフォールバック
+- **Camofox ブラウザプロファイル（共有）**: `camofox-persistent/` ディレクトリにログイン状態（cookies.sqlite）が保存されている。全インスタンスで共有
+- **Cookie インポート**: Netscape形式の cookies.txt がある場合は `camofox_import_cookies` でインポート可能。cookies.txt のパス: `camofox-persistent/cookies_export.txt`
+- **persistent session を使うには**: `camofox_create_tab` で `persistent: true` を指定するとログイン状態が維持されたブラウザが起動する
 
 ## Research Sources (@itarutomy スタイル)
 
