@@ -43,6 +43,12 @@ Main-LINE は Cloudflare Tunnel (`https://openclaw.deskrex.ai`) 経由で LINE w
 
 Eleven と Johnny は Discord 上で同じチャンネル (1484094170648805397) に参加。Sudax/Tight/Suika は別チャンネル (1484387071790678067) に参加。各インスタンスは独立したメモリ・人格を持つ。
 
+### 全インスタンス共通設定
+
+全インスタンス（LINE/Slack/Telegram/Discord全Bot）共通:
+- **Camofox Browser**: 全9インスタンスの `~/.openclaw-{profile}/extensions/camofox-browser/` にインストール済み
+- **ブラウザプロファイル共有**: `~/.openclaw/shared/camofox-persistent/` に実データ（cookies.sqlite等）を配置し、全ワークスペースからシンボリックリンクで参照。1箇所でログインすれば全Botが同じログイン状態を使える
+
 ### Discord Bot 共通設定
 
 全Discord Botインスタンス（Eleven/Johnny/Sudax/Tight/Suika/itarutomy）の openclaw.json 設定:
