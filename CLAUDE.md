@@ -47,6 +47,7 @@ Eleven と Johnny は Discord 上で同じチャンネル (1484094170648805397) 
 
 全インスタンス（LINE/Slack/Telegram/Discord全Bot）共通:
 - **Camofox Browser**: 全9インスタンスの `~/.openclaw-{profile}/extensions/camofox-browser/` にインストール済み
+- **CAMOFOX_API_KEY**: 全9インスタンスの `.env` に設定済み（同一キー）。Cookie インポート (`camofox_import_cookies`) に必要
 - **ブラウザプロファイル共有**: `~/.openclaw/shared/camofox-persistent/` に実データ（cookies.sqlite等）を配置し、全ワークスペースからシンボリックリンクで参照。1箇所でログインすれば全Botが同じログイン状態を使える
 
 ### Discord Bot 共通設定
